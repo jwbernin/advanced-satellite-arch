@@ -1,0 +1,38 @@
+---
+# Gather content view filters from content view
+- name: Filter Remove | Gather Content View Filters
+  redhat.satellite.content_view_filter_info:
+    username: "{{ satellite_username | mandatory }}"
+    password: "{{ satellite_password | mandatory }}"
+    server_url: "https://{{ satellite_server_url }}"
+    validate_certs: "{{ satellite_validate_certs | default(omit, true) }}"
+    organization: "{{ satellite_organization }}"
+    content_view: "{{ cv['name'] | mandatory }}"
+  register: cv_filters_result
+
+# Remove only INCLUDED content view filters
+- name: Filter Remove | Remove Content View Filters
+  when: cv_filters_result['content_view_filters'] | map(attribute='inclusion') # Only execute against included filters
+  block:
+    # - ansible.builtin.debug:
+    #     var: cv_filters_result['content_view_filters']
+
+    # - ansible.builtin.debug:
+    #     var: cv_filters_result['content_view_filters'] | map(attribute='name')
+
+    # Remove all filters from content view, that have the attribute of inclusion
+    - name: Filter Remove | Remove Content View Filters
+      redhat.satellite.content_view_filter:
+        username: "{{ satellite_username | mandatory }}"
+        password: "{{ satellite_password | mandatory }}"
+        server_url: "https://{{ satellite_server_url }}"
+        validate_certs: "{{ satellite_validate_certs | default(omit, true) }}"
+        organization: "{{ satellite_organization }}"
+        content_view: "{{ cv['name'] | mandatory }}"
+        filter_type: "{{ cv_filter['type']}}"
+        name: "{{ cv_filter['name'] }}"
+        state: absent
+      loop: "{{ cv_filters_result['content_view_filters'] }}"
+      loop_control:
+        loop_var:  cv_filter
+        label: "{{ cv_filter['name'] }}"

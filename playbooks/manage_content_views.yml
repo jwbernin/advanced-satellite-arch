@@ -1,0 +1,18 @@
+---
+- name: Manage content views on Satellite
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/satellite_operations/vars/main.yml
+
+  tasks:
+    - name: Skip playbook if variables are not defined
+      when: satellite_content_views is not defined or satellite_content_views | length <= 0
+      ansible.builtin.meta: end_play
+
+    - name: Include manage content view task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_content_views.yml
+...

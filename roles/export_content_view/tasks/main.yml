@@ -1,0 +1,6 @@
+---
+# Execute Export Content View Version
+- name: Export Content View Version
+  ansible.builtin.include_tasks:
+    file: export_content_view.yml
+...

@@ -1,0 +1,6 @@
+---
+# Execute Import Content View Version
+- name: Import Content View Version
+  ansible.builtin.include_tasks:
+    file: import_content_view.yml
+...
