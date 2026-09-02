@@ -1,0 +1,70 @@
+---
+# Publish Content View
+- name: Publish | Create Content View
+  block:
+    # Publish an unfiltered content view revision, with the content_view_version_number of YYYYMMDD.0
+    - name: Publish | Publish content view {{ cv['name']}} as version {{ content_view_version_number }}
+      redhat.satellite.content_view_version:
+        username: "{{ satellite_username | mandatory }}"
+        password: "{{ satellite_password | mandatory }}"
+        server_url: "https://{{ satellite_server_url }}"
+        validate_certs: "{{ satellite_validate_certs | default(omit, true) }}"
+        organization: "{{ satellite_organization }}"
+        lifecycle_environments: "{{ content_view_lifecycle_environments_default | default('Library') }}"
+        content_view: "{{ cv['name'] }}"
+        description: "{{ content_view_publish_description | default(omit, true) }}"
+        version: "{{ content_view_version_number | default(omit, true) }}"
+        force_promote: "{{ content_view_promote | default(false) }}"
+        state: present
+      async: "{{ satellite_operation_timeout }}"
+      poll: "{{ satellite_poll_interval }}"
+      register: publish_result
+
+
+### CURRENTLY UNDER DEVELOPMENT - RESCUE MODE ###
+    # - debug:
+    #    var: publish_result
+
+    # - name: Verify publish success
+    #   redhat.satellite.content_view_version_info:
+    #     username: "{{ satellite_username | mandatory }}"
+    #     password: "{{ satellite_password | mandatory }}"
+    #     server_url: "https://{{ satellite_server_url }}"
+    #     validate_certs: "{{ satellite_validate_certs | default(omit) }}"
+    #     organization: "{{ satellite_organization }}"
+    #     content_view: "{{ cv['name'] }}"
+    #     version: "{{ publish_result['entity']['content_view_versions'] | first | map(attribute='version') }}"
+    #   register: verification_result
+
+    # - debug:
+    #     var: verification_result
+
+    # - debug:
+    #     var: verification_result['versions']
+    #   failed_when: not verification_result['versions'] | length > 0
+
+  # rescue:
+  #   - name: Log failure
+  #     ansible.builtin.copy:
+  #       content: |
+  #         Operation failed at {{ ansible_date_time.iso8601 }}
+  #         Content View: {{ cv['name'] }}
+  #         Error: {{ ansible_failed_result | to_nice_yaml }}
+  #       dest: "/var/log/satellite_operations/{{ ansible_date_time.date }}/{{ cv['name'] }}_error.log"
+
+  #   - name: Attempt rollback if publish failed
+  #     when: publish_result is defined and publish_result.changed
+  #     redhat.satellite.content_view_version:
+  #       username: "{{ satellite_username }}"
+  #       password: "{{ satellite_password }}"
+  #       server_url: "https://{{ satellite_server_url }}"
+  #       validate_certs: "{{ satellite_validate_certs }}"
+  #       organization: "{{ satellite_organization }}"
+  #       content_view: "{{ cv['name'] }}"
+  #       version: "{{ content_view_version_number }}"
+  #       state: absent
+
+  #   - name: Fail with meaningful message
+  #     ansible.builtin.fail:
+  #       msg: >
+  #         "Operation failed for {{ cv['name'] }}. Check logs at /var/log/satellite_operations/{{ ansible_date_time.date }}/{{ cv['name']}}_error.log"

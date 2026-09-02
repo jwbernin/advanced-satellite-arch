@@ -1,0 +1,83 @@
+---
+# Validate variables are defined and set correctly
+# content_view_package_filter_end_date == YYYY-MM-DD string
+# content_view_version should be set with ansible_date_time['date'] | split('-') | join('') == YYYYMMDD
+- name: Validate input parameters
+  ansible.builtin.assert:
+    that:
+      - content_view_package_filter_end_date is defined
+      - content_view_package_filter_end_date | length > 0
+      - content_view_package_filter_end_date | regex_search("^\d{4}-\d{2}-\d{2}$")
+      - content_view_version_number is defined
+      - content_view_version_number | length > 0
+    fail_msg: "Invalid input parameters. Variable is not properly configured."
+
+# Creates a log directory for execution
+- name: Main | Create log directory
+  ansible.builtin.file:
+    path: "/var/log/satellite_operations/{{ ansible_date_time['date'] }}"
+    state: directory
+    mode: '0755'
+  become: true
+
+# Collect all content views within Satellite
+- name: Main | Get list of all content views
+  redhat.satellite.content_view_info:
+    username: "{{ satellite_username }}"
+    password: "{{ satellite_password }}"
+    server_url: "https://{{ satellite_server_url }}"
+    validate_certs: "{{ satellite_validate_certs }}"
+    organization: "{{ satellite_organization }}"
+  register: content_views
+
+# Only apply to specific content view, content_view_name.
+# If you wish to run this against all content views, remove the when conditions
+- name: Main | Content View check, remove, add, and publish
+  when:
+    - cv['name'] == content_view_name
+  block:
+    # Check if fixed version number exists in any content view
+    - name: Main | Loop through content views to check version conflict
+      ansible.builtin.include_tasks:
+        file: cv_version_info.yml
+      loop: "{{ content_views['content_views'] }}"
+      loop_control:
+        loop_var: cv
+        label: "{{ cv['name'] }}"
+
+    # Remove previous filters to prepare this executions of filtered content
+    - name: Main | Remove existing filters from content view
+      ansible.builtin.include_tasks:
+        file: cv_filter_remove.yml
+      loop: "{{ content_views['content_views'] }}"
+      loop_control:
+        loop_var: cv
+        label: "{{ cv['name'] }}"
+
+    # Publish a new unfiltered content view
+    - name: Main | Publish unfiltered content view
+      ansible.builtin.include_tasks:
+        file: cv_publish.yml
+      loop: "{{ content_views['content_views'] }}"
+      loop_control:
+        loop_var: cv
+        label: "{{ cv['name'] }}"
+  
+    # Publish a new filtered content view, with errata by end_date and specific RPMs to repositories
+    - name: Main | Publish filtered content view
+      ansible.builtin.include_tasks:
+        file: cv_filter_publish.yml
+      loop: "{{ content_views['content_views'] }}"
+      loop_control:
+        loop_var: cv
+        label: "{{ cv['name'] }}"
+
+    # Remove recently created filters to prepare an unfiltered published content view
+    - name: Main | Remove existing filters from content view
+      ansible.builtin.include_tasks:
+        file: cv_filter_remove.yml
+      loop: "{{ content_views['content_views'] }}"
+      loop_control:
+        loop_var: cv
+        label: "{{ cv['name'] }}"
+...

@@ -1,0 +1,30 @@
+- name: Content View Management
+  hosts: localhost # Run from localhost, modules will excute with API to Satellite
+  gather_facts: true
+
+  vars:
+    satellite_server_url: "satellite.local"
+    satellite_username: "admin"
+    satellite_password: "redhat123"
+    satellite_organization: "home"
+    content_view_version_number: "{{ ansible_date_time['date'] | split('-') | join('') }}"
+    content_view_version_minor_rel_number: "1"
+    content_view_package_filter_end_date: "2025-06-01" 
+    content_view_lifecycle_environments: satinfra
+    content_view_specific_packages:
+      - name: kernel
+        version: 5.14.0
+        repositories:
+          - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+            product: "Red Hat Enterprise Linux for x86_64"
+      - name: vim-common
+        repositories:
+          - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+            product: "Red Hat Enterprise Linux for x86_64"
+      - name: terminator
+        repositories: []
+
+  tasks:
+    - name: INCLUDE_ROLE | content_view_management
+      ansible.builtin.include_role:
+        name: content_view_management

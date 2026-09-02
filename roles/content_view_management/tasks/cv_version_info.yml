@@ -1,0 +1,21 @@
+---
+# Collect all versions of the content view "cv['name']" and store it into the variable, cv_versions
+- name: Version Info | Get versions of content view {{ cv['name'] }}
+  redhat.satellite.content_view_version_info:
+    username: "{{ satellite_username | mandatory }}"
+    password: "{{ satellite_password | mandatory }}"
+    server_url: "https://{{ satellite_server_url }}"
+    validate_certs: "{{ satellite_validate_certs | default(omit, true) }}"
+    organization: "{{ satellite_organization | mandatory }}"
+    content_view: "{{ cv['name'] | mandatory }}"
+  register: cv_versions
+
+# Fail if the version that is currently be attempted is already created.
+- name: Version Info | Fail early if version {{ content_view_version_number }} exists for {{ cv['name'] }}
+  ansible.builtin.fail:
+    msg: >
+      Content View "{{ cv['name'] }}" already has version {{ content_view_version_number }}.
+      Please change 'content_view_version_number' to avoid duplication.
+  when:
+    - content_view_version_number is defined
+    - content_view_version_number in (cv_versions['content_view_versions'] | map(attribute='version') | list)

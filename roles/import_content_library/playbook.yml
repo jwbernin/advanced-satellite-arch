@@ -1,0 +1,16 @@
+---
+- name: Import Content Library
+  hosts: localhost # Run from localhost, modules will excute with API to Satellite
+  gather_facts: true
+
+  vars:
+    satellite_server_url: "disconnected.satellite.local" # Disconnected Satellite FQDN
+    satellite_username: "admin" # Example username
+    satellite_password: "redhat123" # Example password
+    satellite_organization: "home" # Satellite organization
+
+  tasks:
+    - name: INCLUDE_ROLE | import_content_library
+      ansible.builtin.include_role:
+        name: import_content_library
+...
