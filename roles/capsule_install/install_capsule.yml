@@ -1,0 +1,15 @@
+---
+- name: Configure and install Satellite Capsule
+  hosts: capsules
+  gather_facts: true
+  become: true
+
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+
+  tasks:
+    - name: Begin Capsule Install
+      ansible.builtin.include_tasks:
+        file: tasks/main.yml
+...
