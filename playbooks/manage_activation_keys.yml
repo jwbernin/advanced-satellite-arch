@@ -1,0 +1,19 @@
+---
+- name: Manage activation keys on Satellite
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/satellite_operations/vars/main.yml
+
+  tasks:
+    - name: Skip playbook if variables are not defined
+      when: satellite_activation_keys is not defined or satellite_activation_keys | length <= 0
+      ansible.builtin.meta: end_play
+
+    - name: Include manage activation keys task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_activation_keys.yml
+
+...

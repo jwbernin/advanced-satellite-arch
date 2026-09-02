@@ -1,0 +1,93 @@
+---
+- name: Initiate failover remediation when a proxy or datacenter goes down
+  hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    # The haproxy that failed - passed from monitoring software
+    downed_haproxy:
+
+    # Scenario 1
+    # Haproxy goes down but is not in the same location as its satellite
+
+    # Scenario 2
+    # Satellite location haproxy goes down
+
+  tasks:
+    - name: Set variable for location of the downed haroxy
+      ansible.builtin.set_fact:
+        downed_haproxy_location: "{{ hostvars[downed_haproxy]['foreman_location'] }}"
+
+    - name: Set variable for country of downed haproxy
+      ansible.builtin.set_fact:
+        downed_haproxy_country: "{{ (downed_haproxy_location | split('/'))[1] }}"
+
+    - name: Set variable for satellite fqdn
+      ansible.builtin.set_fact:
+        satellite_fqdn: "{{ hostvars[downed_haproxy]['foreman_content_attributes']['content_source_name'] }}"
+
+    - name: Set variable for satellite location
+      ansible.builtin.set_fact:
+        satellite_location: "{{ hostvars[satellite_fqdn]['foreman_location'] }}"
+
+    # - name: Set failover proxy using template
+    #   ansible.builtin.set_fact:
+    #     failover_haproxy: "{{ lookup('ansible.builtin.template', './roles/satellite_client_operations/templates/datacenter_failover.j2') }}"
+
+    - name: Set failover haproxy for scenario 1
+      ansible.builtin.set_fact:
+        failover_haproxy: "{{ failover_haproxy | default([]) + [host] }}"
+      loop: "{{ groups['ha_proxies'] }}"
+      loop_control:
+        loop_var: host
+      when:
+        - downed_haproxy_location != satellite_location
+        - hostvars[host]['foreman_location'] == satellite_location
+
+    - name: Create a list of suitable failover haproxies for scenario 2
+      ansible.builtin.set_fact:
+        failover_haproxy: "{{ failover_haproxy | default([]) + [host] }}"
+      loop: "{{ groups['ha_proxies'] }}"
+      loop_control:
+        loop_var: host
+      when:
+        - downed_haproxy_location == satellite_location
+        - (hostvars[host]['foreman_location'] | split('/'))[1] == downed_haproxy_country
+        - downed_haproxy != host
+
+    - name: Choose an haproxy in the same country for scenario 2
+      ansible.builtin.set_fact:
+        failover_haproxy: "{{ failover_haproxy | random }}"
+
+    - name: Edit RHSM.conf hostname entry with failover proxy
+      ansible.builtin.lineinfile:
+        path: /etc/rhsm/rhsm.conf
+        regexp: ^hostname
+        line: hostname = {{ failover_haproxy }}
+
+    - name: Edit RHSM.conf baseurl entry with failover proxy
+      ansible.builtin.lineinfile:
+        path: /etc/rhsm/rhsm.conf
+        regexp: ^baseurl
+        line: baseurl = https://{{ failover_haproxy }}/pulp/content
+
+    - name: Restart rhsm service
+      ansible.builtin.service:
+        name: rhsm
+        state: restarted
+
+    - name: Edit redhat.repo to point to the failover proxy
+      ansible.builtin.replace:
+        path: /etc/yum.repos.d/redhat.repo
+        regexp: '(?:baseurl = https://{{ downed_haproxy }})'
+        replace: 'baseurl = https://{{ failover_haproxy }}'
+
+    - name: Update subscription-manager facts
+      ansible.builtin.command: subscription-manager facts --update
+
+    - name: Clean repos
+      ansible.builtin.command: dnf clean all
+
+    - name: Refresh subscription-manager
+      ansible.builtin.command: subscription-manager refresh
+...

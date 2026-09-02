@@ -1,0 +1,12 @@
+---
+- name: Manage sync plans on Satellite
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Include manage sync plans task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_sync_plans.yml
+...

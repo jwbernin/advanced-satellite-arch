@@ -1,0 +1,14 @@
+---
+- name: Test connectivity between Satellites/Capsules
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: "Check port {{ port_to_check }} connectivity from Satellite to Capsule"
+      ansible.builtin.wait_for:
+        host: "{{ item }}"
+        port: "{{ port_to_check }}"
+        timeout: 15
+      loop: "{{ capsules_fqdn }}"
+...

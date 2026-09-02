@@ -1,0 +1,35 @@
+---
+- name: Manage 3rd party products on connected Satellite
+  hosts: connected_satellite
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/satellite_operations/vars/main.yml
+
+  tasks:
+    - name: Skip playbook if variables are not defined
+      when: satellite_products is not defined or satellite_products | length <= 0
+      ansible.builtin.meta: end_play
+
+    - name: Include manage products task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_products.yml
+
+- name: Manage 3rd party products on disconnected Satellite
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/satellite_operations/vars/main.yml
+    
+  tasks:
+    - name: Skip playbook if variables are not defined
+      when: satellite_products is not defined or satellite_products | length <= 0
+      ansible.builtin.meta: end_play
+
+    - name: Include manage products task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_products.yml
+...

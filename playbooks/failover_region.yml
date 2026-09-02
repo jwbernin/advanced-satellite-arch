@@ -1,0 +1,83 @@
+---
+- name: Failover prep work
+  hosts: all
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/satellite_client_operations/vars/failover.yml
+  vars:
+    satellite_server_url: "{{ ansible_eda['event']['url_check']['url'] }}"
+    satellite_server_fqdn: "{{ satellite_server_url | replace('https://', '') }}"
+
+  tasks:
+    - name: Set variable for location of the downed satellite
+      ansible.builtin.set_fact:
+        downed_satellite_location: "{{ hostvars[satellite_server_fqdn]['foreman_location'] }}"
+      run_once: true
+      delegate_to: localhost
+
+    - name: Set variable for region of downed satellite
+      ansible.builtin.set_fact:
+        downed_satellite_region: "{{ (downed_satellite_location | split('/'))[0] }}"
+      run_once: true
+      delegate_to: localhost
+
+    - name: Set variable for lifecycle environment
+      ansible.builtin.set_fact:
+        current_lifecycle_env: "{{ foreman_content_attributes['lifecycle_environment']['name'] }}"
+
+    - name: Set variable for content view
+      ansible.builtin.set_fact:
+        current_content_view: "{{ foreman_content_attributes['content_view_name'] }}"
+
+    # Only works if they follow the current naming standards
+    - name: Set variable for registration activation key
+      ansible.builtin.set_fact:
+        registration_ak: "{{ current_content_view }}-{{ current_lifecycle_env }}"
+
+# - name: Initiate failover remediation when a region's disconnected satellite is down
+#   # Constructed inventory for clients only or use location groups and filter out cap, pxy, sat
+#   # hosts: all # Need a source of truth for which clients to fail over (Satellite, AAP Inventory, host collections, etc)
+#   hosts: "{{ ansible_limit | default('all', true) }}"
+#   gather_facts: true
+#   become: true
+#   vars:
+#     satellite_username: admin
+#     satellite_password: !vault |
+#           $ANSIBLE_VAULT;1.2;AES256;satellite
+#           66643763353831383564643964326136626536383664393766323131323565356362353265353237
+#           6230653063633338316637636139366464356537343030300a383435646530393936363134646162
+#           36343061396438633430626230636633353534326331376161353331666461643437383961313132
+#           3332343734346363660a316262393364313762616635343563613633613239323336323363653531
+#           35643232636435373634306132383066643536623562323665343537383530643734
+#     satellite_server_fqdn: "{{ satellite_server_url | replace('https://', '') }}"
+
+#   tasks:
+#     - name: Generate registration command
+#       redhat.satellite.registration_command:
+#         username: "{{ satellite_username }}"
+#         password: "{{ satellite_password }}"
+#         server_url: "{{ satellite_server_url }}"
+#         organization: "{{ foreman_organization }}"
+#         location: "{{ foreman_location }}"
+#         activation_keys: "{{ registration_ak }}"
+#         smart_proxy: "{{ failover_capsule }}"
+#         force: true
+#         validate_certs: false
+#         insecure: true
+#         setup_insights: false
+#       register: command
+#       delegate_to: "{{ failover_capsule }}"
+
+#     - name: Perform registration
+#       ansible.builtin.shell:
+#         cmd: "{{ command.registration_command }}"
+
+#     - name: Install package for tracer
+#       ansible.builtin.dnf:
+#         name: katello-host-tools-tracer
+#         state: latest
+
+#     - name: Run Katello package upload command
+#       ansible.builtin.command: katello-package-upload --force
+...
