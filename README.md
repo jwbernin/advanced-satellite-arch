@@ -1,4 +1,4 @@
-# Ansible Collection - redhat.advance_satellite_arch
+# Ansible Collection - redhat.advanced_satellite_arch
 
 Documentation for the collection.
 
