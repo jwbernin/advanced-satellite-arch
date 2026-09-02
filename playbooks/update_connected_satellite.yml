@@ -1,0 +1,186 @@
+---
+- name: Update connected Satellite server
+  hosts: connected_satellite
+  gather_facts: true
+  become: true
+  vars:
+    satellite_admin_username: admin
+    satellite_admin_password: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;satellite
+          66643763353831383564643964326136626536383664393766323131323565356362353265353237
+          6230653063633338316637636139366464356537343030300a383435646530393936363134646162
+          36343061396438633430626230636633353534326331376161353331666461643437383961313132
+          3332343734346363660a316262393364313762616635343563613633613239323336323363653531
+          35643232636435373634306132383066643536623562323665343537383530643734
+    satellite_server_url: "https://{{ ansible_fqdn }}"
+    satellite_organization: # AAP
+    satellite_content_view: # AAP
+    satellite_lce: # AAP
+    satellite_sync_list:
+      - product: Red Hat Satellite
+      - product: Red Hat Enterprise Linux for x86_64
+        repository: "Red Hat Satellite Maintenance 6.16 for RHEL {{ ansible_distribution_major_version }} x86_64 RPMs"
+      - product: Red Hat Satellite Capsule
+    satellite_whitelist_options: non-rh-packages
+
+  tasks:
+    - name: Unset release version
+      ansible.builtin.shell: subscription-manager release --unset
+
+    - name: Gather info on installed packages
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Set variable for current Satellite version
+      ansible.builtin.set_fact:
+        satellite_full_version: "{{ ansible_facts.packages['satellite'][0].version }}"
+      when: "'satellite' in ansible_facts.packages"
+
+    - name: Set variable for current major Satellite version
+      ansible.builtin.set_fact:
+        satellite_major_version: "{{ (satellite_full_version | split('.'))[:-2] | join('.') }}"
+
+    - name: Sync the Satellite, Satellite Maintenance, and Capsule repositories
+      redhat.satellite.repository_sync:
+        username: "{{ satellite_admin_username }}"
+        password: "{{ satellite_admin_password }}"
+        server_url: "{{ satellite_server_url }}"
+        organization: "{{ satellite_organization }}"
+        product: "{{ item['product'] }}"
+        repository: "{{ item['repository'] | default(omit) }}"
+        validate_certs: false
+      loop: "{{ satellite_sync_list }}"
+      register: repo_sync_status
+      async: 7200
+      poll: 0
+
+    - name: Wait for repo sync to finish
+      ansible.builtin.async_status:
+        jid: "{{ item['ansible_job_id'] }}"
+      register: repo_sync_status_jobs
+      retries: 720
+      delay: 10
+      until: repo_sync_status_jobs['finished']
+      loop: "{{ repo_sync_status['results'] }}"
+
+    - name: Publish and promote Satellite content view
+      redhat.satellite.content_view_version:
+        username: "{{ satellite_admin_username }}"
+        password: "{{ satellite_admin_password }}"
+        server_url: "{{ satellite_server_url }}"
+        organization: "{{ satellite_organization }}"
+        content_view: "{{ satellite_content_view }}"
+        lifecycle_environments: "{{ satellite_lce }}"
+        validate_certs: false
+
+    - name: Cleanup unused Content Views # noqa: var-naming
+      ansible.builtin.include_role:
+        name: redhat.satellite.content_view_version_cleanup
+      vars:
+        satellite_username: "{{ satellite_admin_username }}"
+        satellite_password: "{{ satellite_admin_password }}"
+        satellite_content_view_version_cleanup_keep: 1
+
+    - name: Update Satellite-Maintain if needed
+      ansible.builtin.package:
+        name: rubygem-foreman_maintain
+        state: latest
+
+    - name: Perform a health check
+      ansible.builtin.shell: "satellite-maintain update check --assumeyes --whitelist={{ satellite_whitelist_options }}"
+      environment:
+        TMOUT: 0
+      retries: 3
+      delay: 5
+      register: result
+      until: result is not failed
+
+    - name: Update Satellite and RHEL
+      ansible.builtin.shell: "satellite-maintain update run --assumeyes --whitelist={{ satellite_whitelist_options }}"
+      environment:
+        TMOUT: 0
+
+    - name: Stop Satellite services
+      ansible.builtin.shell: satellite-maintain service stop
+
+    - name: Reboot server
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
+
+- name: Sync repos on disconnected Satellite servers
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars:
+    satellite_disconnected_admin_username: admin
+    satellite_disconnected_admin_password: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;satellite
+          66643763353831383564643964326136626536383664393766323131323565356362353265353237
+          6230653063633338316637636139366464356537343030300a383435646530393936363134646162
+          36343061396438633430626230636633353534326331376161353331666461643437383961313132
+          3332343734346363660a316262393364313762616635343563613633613239323336323363653531
+          35643232636435373634306132383066643536623562323665343537383530643734
+    satellite_disconnected_server_url: "https://{{ ansible_fqdn }}"
+    satellite_organization: # AAP
+    satellite_capsule_content_view: # AAP
+    satellite_sync_list:
+      - product: Red Hat Enterprise Linux for x86_64
+        repository: "Red Hat Satellite Maintenance 6.16 for RHEL {{ ansible_distribution_major_version }} x86_64 RPMs"
+      - product: Red Hat Satellite Capsule
+
+  tasks:
+    - name: Gather info on installed packages
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Set variable for current Satellite version
+      ansible.builtin.set_fact:
+        satellite_full_version: "{{ ansible_facts.packages['satellite'][0].version }}"
+      when: "'satellite' in ansible_facts.packages"
+
+    - name: Set variable for current major Satellite version
+      ansible.builtin.set_fact:
+        satellite_major_version: "{{ (satellite_full_version | split('.'))[:-2] | join('.') }}"
+
+    - name: Sync the Satellite Maintenance and Capsule repositories
+      redhat.satellite.repository_sync:
+        username: "{{ satellite_disconnected_admin_username }}"
+        password: "{{ satellite_disconnected_admin_password }}"
+        server_url: "{{ satellite_disconnected_server_url }}"
+        organization: "{{ satellite_organization }}"
+        product: "{{ item['product'] }}"
+        repository: "{{ item['repository'] | default(omit) }}"
+        validate_certs: false
+      loop: "{{ satellite_sync_list }}"
+      register: repo_sync_status
+      async: 7200
+      poll: 0
+
+    - name: Wait for repo sync to finish
+      ansible.builtin.async_status:
+        jid: "{{ item['ansible_job_id'] }}"
+      register: repo_sync_status_jobs
+      retries: 720
+      delay: 10
+      until: repo_sync_status_jobs['finished']
+      loop: "{{ repo_sync_status['results'] }}"
+
+    - name: Publish and promote Capsule content view
+      redhat.satellite.content_view_version:
+        username: "{{ satellite_disconnected_admin_username }}"
+        password: "{{ satellite_disconnected_admin_password }}"
+        server_url: "{{ satellite_disconnected_server_url }}"
+        organization: "{{ satellite_organization }}"
+        content_view: "{{ satellite_capsule_content_view }}"
+        lifecycle_environments: "{{ satellite_lce }}"
+        validate_certs: false
+
+    - name: Cleanup unused Content Views # noqa: var-naming
+      ansible.builtin.include_role:
+        name: redhat.satellite.content_view_version_cleanup
+      vars:
+        satellite_server_url: "{{ satellite_disconnected_server_url }}"
+        satellite_username: "{{ satellite_disconnected_admin_username }}"
+        satellite_password: "{{ satellite_disconnected_admin_password }}"
+        satellite_content_view_version_cleanup_keep: 1
+...

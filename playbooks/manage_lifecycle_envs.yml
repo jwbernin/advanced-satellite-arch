@@ -1,0 +1,18 @@
+---
+- name: Manage lifecycle environments on Satellite
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars_files:
+    - roles/satellite_operations/vars/main.yml
+
+  tasks:
+    - name: Skip playbook if variables are not defined
+      when: satellite_lifecycle_environments is not defined or (satellite_lifecycle_environments | length <= 0)
+      ansible.builtin.meta: end_play
+
+    - name: Include manage lifecycle environments task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: manage_lifecycle_envs.yml
+...

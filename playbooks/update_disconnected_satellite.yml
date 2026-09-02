@@ -1,0 +1,64 @@
+---
+- name: Update disconnected Satellite servers
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+  vars:
+    satellite_connected: # AAP
+    satellite_whitelist_options: non-rh-packages
+
+  tasks:
+    - name: Unset release version
+      ansible.builtin.shell: subscription-manager release --unset
+
+    - name: Gather info on installed packages on connected satellite
+      ansible.builtin.package_facts:
+        manager: auto
+      delegate_to: "{{ satellite_connected }}"
+
+    - name: Verify Satellite version of connected satellite
+      ansible.builtin.set_fact:
+        satellite_connected_current_version: "{{ ansible_facts.packages['satellite'][0].version }}"
+      when: "'satellite' in ansible_facts.packages"
+      delegate_to: "{{ satellite_connected }}"
+
+    - name: Gather info on installed packages
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Set variable for current Satellite version on disconnected satellite
+      ansible.builtin.set_fact:
+        satellite_disconnected_current_version: "{{ ansible_facts.packages['satellite'][0].version }}"
+      when: "'satellite' in ansible_facts.packages"
+
+    - name: Assert that connected version > disconnected
+      ansible.builtin.assert:
+        that: satellite_connected_current_version >= satellite_disconnected_current_version
+        fail_msg: "Connected Satellite must be updated first. Perform the update before rerunning this job"
+
+    - name: Update Satellite-Maintain if needed
+      ansible.builtin.package:
+        name: rubygem-foreman_maintain
+        state: latest
+
+    - name: Perform a health check
+      ansible.builtin.shell: "satellite-maintain update check --assumeyes --whitelist={{ satellite_whitelist_options }}"
+      environment:
+        TMOUT: 0
+      retries: 3
+      delay: 5
+      register: result
+      until: result is not failed
+
+    - name: Update Satellite and RHEL
+      ansible.builtin.shell: satellite-maintain update run --assumeyes --whitelist="{{ satellite_whitelist_options }}"
+      environment:
+        TMOUT: 0
+
+    - name: Stop Satellite services
+      ansible.builtin.shell: satellite-maintain service stop
+
+    - name: Reboot server
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
+...

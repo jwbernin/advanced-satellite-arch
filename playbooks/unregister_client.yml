@@ -1,0 +1,12 @@
+---
+- name: Unregister a client on Satellite
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Include unregister client task from the role
+      ansible.builtin.include_role:
+        name: satellite_client_operations
+        tasks_from: unregister_client.yml
+...

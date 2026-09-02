@@ -1,0 +1,12 @@
+---
+- name: Start a capsule sync on Satellite
+  hosts: capsules
+  become: true
+
+  tasks:
+    - name: Include capsule sync task from the role
+      ansible.builtin.include_role:
+        name: satellite_operations
+        tasks_from: start_capsule_sync.yml
+
+...
