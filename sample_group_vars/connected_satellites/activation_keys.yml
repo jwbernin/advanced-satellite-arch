@@ -1,0 +1,16 @@
+---
+satellite_activation_keys:
+  - name: "{{ satellite_ak }}"
+    lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_infra') | map(attribute='env_name') | join(', ') }}"
+    content_view: satellite6
+    content_overrides:
+      - label: rhel-9-for-x86_64-baseos-rpms
+        override: enabled
+      - label: rhel-9-for-x86_64-appstream-rpms
+        override: enabled
+      - label: "satellite-{{ satellite_deployment_version }}-for-rhel-9-x86_64-rpms"
+        override: enabled
+      - label: "satellite-maintenance-{{ satellite_deployment_version }}-for-rhel-9-x86_64-rpms"
+        override: enabled
+    service_level: "Premium"
+...

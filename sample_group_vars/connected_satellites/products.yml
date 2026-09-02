@@ -1,0 +1,25 @@
+---
+satellite_products:
+  - name: EPEL
+    gpg_key: RPM-GPG-KEY-EPEL
+    repositories:
+      # - name: EPEL8_X86
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL8
+      #   url: https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/
+      - name: EPEL9_X86
+        content_type: yum
+        gpg_key: RPM-GPG-KEY-EPEL9
+        url: https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/
+      # - name: EPEL8_S390X
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL8
+      #   url: https://dl.fedoraproject.org/pub/epel/8/Everything/s390x/
+      # - name: EPEL9_S390X
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL9
+      #   url: https://dl.fedoraproject.org/pub/epel/9/Everything/s390x/
+
+satellite_rhel_product_name: "Red Hat Enterprise Linux for x86_64"
+satellite_satellite_product_name: "Red Hat Satellite"
+...

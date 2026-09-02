@@ -1,0 +1,11 @@
+---
+satellite_server_url: "https://{{ ansible_fqdn }}"
+satellite_rhn_org: # Organization ID on RHN, must be in 'quotes', Ex. "123456"
+satellite_rhn_activation_key: # Activation Key
+satellite_organization: # Organization Name for deployment, must be in quotes
+satellite_initial_location: # Default location
+satellite_location: "{{ satellite_initial_location }}"
+satellite_email: # Add email address of primary POC
+satellite_giturl: # Add repository address, Ex. git.example.com
+satellite_language: "en_US.utf-8"
+...

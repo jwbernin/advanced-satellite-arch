@@ -1,0 +1,14 @@
+---
+# Certificates
+# satellite_capsule_vip: "capsule.example.com"
+# satellite_CSR: "false"
+# satellite_country: "US"
+# satellite_state: "FL"
+# satellite_city: "Tampa"
+# satellite_company: "Example LLC"
+# satellite_organizational_unit: "EXAMPLE"
+# satellite_ip: "192.168.2.34"
+# satellite_short: "satellite"
+# satellite_capsule_short: "{{ ansible_hostname }}"
+# satellite_capsule_public_ip: "192.168.2.4"
+...

@@ -1,0 +1,23 @@
+---
+# EXAMPLE Satellite Infrastructure Inventory
+# Variables are defined in the group_vars directory
+all:
+ children:
+  satellites:
+
+# Child group of all and
+# parent group of connected_satellite/disconnected_satellites
+satellites:
+  children:
+    connected_satellite:
+    disconnected_satellites:
+
+# Child group of satellites
+connected_satellite:
+  hosts:
+    satellite.domain:
+
+# Child group of satellites
+disconnected_satellites:
+  hosts:
+    satellite_disconnected.domain:

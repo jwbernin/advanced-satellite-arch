@@ -1,0 +1,21 @@
+---
+satellite_locations:
+  - name: Default # Define location
+    organizations: "{{ satellite_organization }}"
+
+  ### Example locations for parent/child locations
+  ### Parent locations for regions go here
+  # - name: NORAM
+  #   organizations: "{{ satellite_organization }}"
+
+  ### Children locations for countries (parent = regions) go here
+  # - name: US
+  #   organizations: "{{ satellite_organization }}"
+  #   parent: NORAM
+
+  ### Children locations for datacenter (parent - country) go here
+  ### Location output will be NORAM/US/City
+  # - name: City
+  #   organizations: "{{ satellite_organization }}"
+  #   parent: NORAM/US
+...

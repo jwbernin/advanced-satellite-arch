@@ -1,0 +1,9 @@
+---
+# Administration
+
+satellite_capsule_organization:
+satellite_capsule_ak: # AAP
+satellite_capsule_location: # AAP
+satellite_fqdn: # AAP
+satellite_capsule_sync_wait_time: 86400
+...

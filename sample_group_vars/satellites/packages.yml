@@ -1,0 +1,11 @@
+---
+# Required packages needed to install Red Hat Satellite
+satellite_packages:
+  - satellite
+  - chrony
+  - sos
+  - fapolicyd
+  - vim
+  - bash-completion
+  - bind-utils
+...

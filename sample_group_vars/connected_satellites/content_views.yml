@@ -1,0 +1,14 @@
+---
+satellite_content_views:
+  - name: satellite6
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Satellite Maintenance {{ satellite_deployment_version }} for RHEL 9 x86_64 RPMs"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Satellite {{ satellite_deployment_version }} for RHEL 9 x86_64 RPMs"
+        product: "{{ satellite_satellite_product_name }}"
+    lifecycle_environments: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_infra') | map(attribute='env_name') }}"
+...

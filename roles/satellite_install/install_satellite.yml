@@ -1,0 +1,40 @@
+---
+# Example Playbook for Connected and Disconnected Satellite Installations
+- name: Configure and Install Connected Satellite
+  hosts: connected_satellite
+  gather_facts: true
+  become: true
+
+  # Load var files for connected Satellite installation
+  vars_files:
+    - defaults/main.yml
+    - defaults/connected.yml
+
+  tasks:
+    - name: Assert that Satellite is RHN connected
+      ansible.builtin.assert:
+        that: satellite_rhn_connected is true
+
+    - name: Begin Connected Satellite Install
+      ansible.builtin.include_tasks:
+        file: tasks/main.yml
+
+- name: Configure and Install Disconnected Satellite
+  hosts: disconnected_satellites
+  gather_facts: true
+  become: true
+
+  # Load var files for disconnected Satellite installation
+  vars_files:
+    - defaults/main.yml
+    - vars/disconnected.yml
+
+  tasks:
+    - name: Assert that Satellite is RHN disconnected
+      ansible.builtin.assert:
+        that: satellite_rhn_connected is false
+
+    - name: Begin Disconnected Satellite Install
+      ansible.builtin.include_tasks:
+        file: tasks/main.yml
+...

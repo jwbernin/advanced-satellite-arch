@@ -1,0 +1,14 @@
+---
+# Storage
+capsule_pulp_size: 300g # This will default the size of the pulp logical volume to 300 Gb, update if meet needs of environment
+capsule_pgsql_size: 20g # This will default the size of the pgsql logical volume to 20 Gb, update if meet needs of environment
+capsule_data_device: /dev
+capsule_vg_name: cap_vg01
+capsule_req_dirs:
+  - mount_point: /var/lib/pulp
+    lv_name: pulp
+    lv_size: "{{ capsule_pulp_size }}"
+  - mount_point: /var/lib/pgsql
+    lv_name: pgsql
+    lv_size: "{{ capsule_pgsql_size }}"
+...

@@ -1,0 +1,18 @@
+---
+satellite_lifecycle_envs:
+  - name: satellite_lifecycle_capsule
+    env_name: "satinfra"
+    prior: "Library"
+
+  - name: satellite_lifecycle_daily
+    env_name: "daily"
+    prior: "Library"
+  
+  - name: satellite_lifecycle_certify
+    env_name: "certify"
+    prior: "Library"
+
+  - name: satellite_lifecycle_monthly
+    env_name: "monthly"
+    prior: "certify"
+...

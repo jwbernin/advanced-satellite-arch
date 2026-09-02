@@ -1,0 +1,6 @@
+---
+satellite_lifecycle_envs:
+  - name: satellite_infra
+    env_name: "satinfra"
+    prior: "Library"
+...

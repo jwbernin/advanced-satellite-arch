@@ -1,0 +1,11 @@
+---
+# Required packages needed to install Red Hat Satellite Capsule
+satellite_capsule_packages:
+  - satellite-capsule
+  - chrony
+  - sos
+  - fapolicyd 
+  - vim 
+  - bash-completion 
+  - bind-utils
+...

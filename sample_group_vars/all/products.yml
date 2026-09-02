@@ -1,0 +1,28 @@
+---
+satellite_products:
+  - name: EPEL
+    gpg_key: RPM-GPG-KEY-EPEL
+    repositories:
+      # - name: EPEL8_X86
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL8
+      #   url: "{{ upstream_product_path }}/EPEL/EPEL8_X86"
+      - name: EPEL9_X86
+        content_type: yum
+        gpg_key: RPM-GPG-KEY-EPEL9
+        url: "{{ upstream_product_path }}/EPEL/EPEL9_X86"
+      # - name: EPEL8_S390X
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL8
+      #   url: "{{ upstream_product_path }}/EPEL/EPEL8_S390X"
+      # - name: EPEL9_S390X
+      #   content_type: yum
+      #   gpg_key: RPM-GPG-KEY-EPEL9
+      #   url: "{{ upstream_product_path }}/EPEL/EPEL9_S390X"
+ 
+satellite_rhel_product_name: "Red Hat Enterprise Linux for x86_64"
+satellite_capsule_product_name: "Red Hat Satellite Capsule"
+satellite_rhel_s390_product_name: "Red Hat Enterprise Linux for IBM z Systems"
+satellite_code_ready_s390_product_name: "Red Hat CodeReady Linux Builder for IBM z Systems"
+satellite_epel_product_name: "EPEL"
+...
