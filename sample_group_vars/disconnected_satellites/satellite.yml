@@ -1,0 +1,21 @@
+---
+# Satellite
+satellite_rhn_connected: false
+satellite_connected_fqdn: # satellite_server_url?
+satellite_ak: "satellite6-satinfra"
+satellite_capsule_ak: "capsule6-satinfra"
+satellite_selinux_state: "enforcing"
+satellite_installer_scenario: "satellite"
+satellite_sync_time: "19:30:00"
+satellite_sync_date: "{{ ansible_date_time['date'] }} {{ satellite_sync_time }} {{ ansible_date_time['tz'] }}"
+satellite_syncplan_interval: "daily"
+satellite_syncplan_name: "{{ satellite_syncplan_interval | capitalize }} {{ satellite_organization }} Products"
+satellite_subscription_to_search: "Red Hat Satellite Infrastructure Subscription"
+satellite_repo_sync_wait_time: 21600 # Seconds
+
+satellite_installer_options:
+  - '--foreman-initial-admin-username {{ satellite_admin_username }}'
+  - '--foreman-initial-admin-password {{ satellite_admin_password }}'
+  - '--foreman-initial-organization {{ satellite_organization }}'
+  - '--foreman-initial-location {{ satellite_initial_location }}'
+...

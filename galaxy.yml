@@ -1,0 +1,36 @@
+namespace: redhat
+name: satellite_geo
+description: Ansible roles to manage Geo-Replicated Red Hat Satellite installations
+authors:
+  - "Matt Willis <mawillis@redhat.com>"
+  - "Bryce Tant <btant@redhat.com>"
+  - "Cory McKee <cmckee@redhat.com>"
+  - "John Berninger <john.berninger@gmail.com>"
+
+version: 0.2.1
+license:
+- GPL-3.0-or-later
+tags:
+  - satellite
+  - infrastructure
+  - georeplicated
+
+dependencies:
+  ansible.posix: "*"
+  community.crypto: "*"
+  community.general: "*"
+  redhat.rhel_system_roles: "*"
+  redhat.satellite: "*"
+  redhat.satellite_operations: "*"
+
+readme: README.md
+homepage: "https://access.redhat.com/products/red-hat-satellite"
+documentation: "https://access.redhat.com/documentation/en-us/red_hat_satellite/"
+issues: "https://bugzilla.redhat.com"
+
+# A list of file glob-like patterns used to filter any files or directories that should not be included in the build
+# artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This
+# uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
+# and '.git' are always filtered. Mutually exclusive with 'manifest'
+build_ignore: []
+

@@ -1,0 +1,74 @@
+---
+satellite_redhat_repos:
+  - name: "Red Hat Satellite Capsule {{ satellite_deployment_version }} for RHEL {{ ansible_distribution_major_version }} x86_64 (RPMs)"
+    label: "satellite-capsule-{{ satellite_deployment_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
+    all: "true"
+  - name: "Red Hat Satellite Maintenance {{ satellite_deployment_version }} for RHEL {{ ansible_distribution_major_version }} x86_64 (RPMs)"
+    label: "satellite-maintenance-{{ satellite_deployment_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
+    all: "true"
+  - name: "Red Hat Satellite {{ satellite_deployment_version }} for RHEL {{ ansible_distribution_major_version }} x86_64 (RPMs)"
+    label: "satellite-{{ satellite_deployment_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
+    all: "true"
+  - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
+    label: "satellite-client-6-for-rhel-9-x86_64-rpms"
+    all: "true"
+  # - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+  #   label: "satellite-client-6-for-rhel-8-x86_64-rpms"
+  #   all: "true"
+  # - name: "Red Hat Satellite Client 6 for RHEL 8 s390x RPMs"
+  #   label: "satellite-client-6-for-rhel-8-s390x-rpms"
+  #   all: "true"
+  # - name: "Red Hat Satellite Client 6 for RHEL 9 s390x RPMs"
+  #   label: "satellite-client-6-for-rhel-9-s390x-rpms"
+  #   all: "true"
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+    label: rhel-9-for-x86_64-baseos-rpms
+    repos:
+      - releasever: "9"
+    all: "false"
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
+    label: rhel-9-for-x86_64-appstream-rpms
+    repos:
+      - releasever: "9"
+    all: "false"
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
+  #   label: rhel-8-for-x86_64-baseos-rpms
+  #   repos:
+  #     - releasever: "8"
+  #   all: "false"
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"
+  #   label: rhel-8-for-x86_64-appstream-rpms
+  #   repos:
+  #     - releasever: "8"
+  #   all: "false"
+  # - name: "Red Hat Enterprise Linux 8 for IBM z Systems - AppStream RPMs 8"
+  #   label: "rhel-8-for-s390x-appstream-rpms"
+  #   repos:
+  #     - releasever: "8"
+  #   all: "false"
+  # - name: "Red Hat Enterprise Linux 8 for IBM z Systems - BaseOS RPMs 8"
+  #   label: "rhel-8-for-s390x-baseos-rpms"
+  #   repos:
+  #     - releasever: "8"
+  #   all: "false"
+  # - name: "Red Hat Enterprise Linux 9 for IBM z Systems - AppStream RPMs 9"
+  #   label: "rhel-9-for-s390x-appstream-rpms"
+  #   repos:
+  #     - releasever: "9"
+  #   all: "false"
+  # - name: "Red Hat Enterprise Linux 9 for IBM z Systems - BaseOS RPMs 9"
+  #   label: "rhel-9-for-s390x-baseos-rpms"
+  #   repos:
+  #     - releasever: "9"
+  #   all: "false"
+  # - name: "Red Hat CodeReady Linux Builder for RHEL 8 IBM z Systems RPMs 8"
+  #   label: "codeready-builder-for-rhel-8-s390x-rpms"
+  #   repos:
+  #     - releasever: "8"
+  #   all: "false"
+  # - name: "Red Hat CodeReady Linux Builder for RHEL 9 IBM z Systems RPMs 9"
+  #   label: "codeready-builder-for-rhel-9-s390x-rpms"
+  #   repos:
+  #     - releasever: "9"
+  #   all: "false"
+...

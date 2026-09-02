@@ -1,0 +1,15 @@
+---
+- name: Configure and install connected Satellite
+  hosts: connected_satellites
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Assert that connected
+      ansible.builtin.assert:
+        that: satellite_rhn_connected is true
+
+    - name: Include manage activation keys task from the role
+      ansible.builtin.include_role:
+        name: satellite_install
+...

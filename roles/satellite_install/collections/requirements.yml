@@ -1,0 +1,8 @@
+---
+collections:
+  - ansible.posix
+  - community.general
+  - community.crypto
+  - redhat.rhel_system_roles
+  - redhat.satellite
+  - redhat.satellite_operations

@@ -1,0 +1,43 @@
+---
+ansible-navigator:
+  ansible:
+    config:
+      path: ./ansible.cfg
+
+  editor:
+    command: /bin/vim
+
+  execution-environment:
+    container-engine: podman
+    enabled: true
+    environment-variables:
+      pass:
+        - GIT_USER
+        - GUID
+        - CLIENT_ID
+        - PASSWORD
+        - TENANT
+        - SUBSCRIPTION
+        - RESOURCEGROUP
+        - AZURE_CLIENT_ID
+        - AZURE_SECRET
+        - AZURE_TENANT
+        - AZURE_SUBSCRIPTION_ID
+        - AZURE_RESOURCE_GROUP
+        - ARM_RESOURCE_GROUP
+        - ARM_SUBSCRIPTION_ID
+        - ARM_TENANT_ID
+        - ARM_CLIENT_ID
+        - ARM_CLIENT_SECRET
+
+    image: quay.io/mattwillis/satellite-ee-supported-rhel9:latest
+    pull:
+      policy: tag
+
+  logging:
+    level: critical
+  
+  mode: stdout
+
+  playbook-artifact:
+    enable: false

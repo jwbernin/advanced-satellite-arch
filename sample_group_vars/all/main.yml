@@ -1,0 +1,8 @@
+---
+# main.yml
+satellite_server_basearch: "x86_64"
+satellite_os_version: "9"
+satellite_deployment_version: "6.16"
+satellite_timezone: UTC
+satellite_validate_certs: false
+...

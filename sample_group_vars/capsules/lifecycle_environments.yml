@@ -1,0 +1,7 @@
+---
+# Content
+satellite_capsule_lifecycle_envs:
+  - daily
+  - certify
+  - monthly
+...

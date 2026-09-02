@@ -1,0 +1,11 @@
+---
+# Load Balancing
+# satellite_haproxy: # AAP
+# satellite_loadbalancer_fqdn: # AAP
+# satellite_loadbalancer_ak: # AAP
+satellite_loadbalancer_ports:
+  - 80/tcp
+  - 443/tcp
+  - 8000/tcp
+  - 9090/tcp
+...

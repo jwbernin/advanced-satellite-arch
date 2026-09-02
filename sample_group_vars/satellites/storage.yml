@@ -1,0 +1,15 @@
+---
+# Storage
+satellite_pulp_size: 300g # This will default the size of the pulp logical volume to 300 Gb, update if meet needs of environment
+satellite_pgsql_size: 20g # This will default the size of the pgsql logical volume to 20 Gb, update if meet needs of environment
+satellite_req_dirs:
+  - mount_point: /var/lib/pulp
+    lv_name: lv_rhspulp
+    lv_size: "{{ satellite_pulp_size }}"
+  - mount_point: /var/lib/pgsql
+    lv_name: lv_pgsql
+    lv_size: "{{ satellite_pgsql_size }}"
+satellite_data_device: /dev
+# satellite_data_device_name: # Define if necessary, leave commented out if variable will be defined by automation
+satellite_data_disk: "{{ satellite_data_device }}/{{ satellite_data_device_name }}"
+satellite_vg_name: vg_rhsat

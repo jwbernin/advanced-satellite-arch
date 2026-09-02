@@ -1,0 +1,114 @@
+---
+satellite_content_views:
+  - name: capsule6
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Satellite Maintenance {{ satellite_deployment_version }} for RHEL 9 x86_64 RPMs"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Satellite Capsule {{ satellite_deployment_version }} for RHEL 9 x86_64 RPMs"
+        product: "{{ satellite_capsule_product_name }}"
+    lifecycle_environments: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_capsule') | map(attribute='env_name') }}"
+  - name: rhel8_x86
+    repositories:
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs
+        product: 'Red Hat Enterprise Linux for x86_64'
+    lifecycle_environments: Library
+  - name: rhel9_x86
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+        product: "{{ satellite_rhel_product_name }}"
+      - name: Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs
+        product: 'Red Hat Enterprise Linux for x86_64'
+    lifecycle_environments: Library
+  - name: rhel8_s390
+    repositories:
+      - name: 'Red Hat Enterprise Linux 8 for IBM z Systems - AppStream RPMs 8'
+        product: "{{ satellite_rhel_s390_product_name }}"
+      - name: 'Red Hat Enterprise Linux 8 for IBM z Systems - BaseOS RPMs 8'
+        product: "{{ satellite_rhel_s390_product_name }}"
+      - name: 'Red Hat CodeReady Linux Builder for RHEL 8 IBM z Systems RPMs 8'
+        product: "{{ satellite_code_ready_s390_product_name }}"
+      - name: 'Red Hat Satellite Client 6 for RHEL 8 s390x RPMs'
+        product: "{{ satellite_rhel_s390_product_name }}"
+    lifecycle_environments: Library
+  - name: rhel9_s390
+    repositories:
+      - name: 'Red Hat Enterprise Linux 9 for IBM z Systems - AppStream RPMs 9'
+        product: "{{ satellite_rhel_s390_product_name }}"
+      - name: 'Red Hat Enterprise Linux 9 for IBM z Systems - BaseOS RPMs 9'
+        product: "{{ satellite_rhel_s390_product_name }}"
+      - name: 'Red Hat CodeReady Linux Builder for RHEL 9 IBM z Systems RPMs 9'
+        product: "{{ satellite_code_ready_s390_product_name }}"
+      - name: 'Red Hat Satellite Client 6 for RHEL 9 s390x RPMs'
+        product: "{{ satellite_rhel_s390_product_name }}"
+    lifecycle_environments: Library
+  - name: epel8_x86
+    repositories:
+      - name: 'EPEL8_X86'
+        product: "{{ satellite_epel_product_name }}"
+    lifecycle_environments: Library
+  - name: epel9_x86
+    repositories:
+      - name: 'EPEL9_X86'
+        product: "{{ satellite_epel_product_name }}"
+    lifecycle_environments: Library
+  - name: epel8_s390
+    repositories:
+      - name: 'EPEL8_S390X'
+        product: "{{ satellite_epel_product_name }}"
+    lifecycle_environments: Library
+  - name: epel9_s390
+    repositories:
+      - name: 'EPEL9_S390X'
+        product: "{{ satellite_epel_product_name }}"
+    lifecycle_environments: Library
+
+    # Composite
+  - name: rhel8_epel_x86
+    components:
+      - content_view: rhel8_x86
+        latest: true
+      - content_view: epel8_x86
+        latest: true
+    lifecycle_environments:
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_daily') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
+  - name: rhel9_epel_x86
+    components:
+      - content_view: rhel9_x86
+        latest: true
+      - content_view: epel9_x86
+        latest: true
+    lifecycle_environments:
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_daily') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
+  - name: rhel8_epel_s390
+    components:
+      - content_view: rhel8_s390
+        latest: true
+      - content_view: epel8_s390
+        latest: true
+    lifecycle_environments:
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
+  - name: rhel9_epel_s390
+    components:
+      - content_view: rhel9_s390
+        latest: true
+      - content_view: epel9_s390
+        latest: true
+    lifecycle_environments:
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"    
+...

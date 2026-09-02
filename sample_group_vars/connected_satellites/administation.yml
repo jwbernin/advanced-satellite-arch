@@ -1,0 +1,10 @@
+---
+# Administration
+
+# Proxy Settings - if needed, leave commented out if not needed
+# satellite_proxy_server: # AAP
+# satellite_proxy_port: # AAP
+# satellite_proxy_scheme: # AAP
+
+# Manifest
+satellite_manifest_path: # manifest filename, full path location /root/manifest/

@@ -1,0 +1,22 @@
+---
+# System requirements
+
+# Minimum CPU count
+satellite_min_cpu_count: 4
+
+# Minimum Memory Size
+# Size must be integer, MB
+satellite_min_memory_size: 12288
+
+# Minimum Storage Size for main disk
+# Size must be integer, GB
+capsule_data_disk_min_size: 500
+
+# Minimum Storage Size for pulp disk
+# Size must be integer, GB
+capsule_min_pulp_size: 300
+
+# Minimum Storage Size for PostgreSQL database
+# Size must be integer, GB
+capsule_min_pgsql_size: 20
+...
