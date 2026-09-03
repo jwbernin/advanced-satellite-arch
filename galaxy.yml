@@ -1,6 +1,6 @@
 namespace: redhat
-name: satellite_geo
-description: Ansible roles to manage Geo-Replicated Red Hat Satellite installations
+name: advanced_satellite_arch
+description: Ansible roles to manage Red Hat Satellite ASA (Advanced Satellite Architecture) installations
 authors:
   - "Matt Willis <mawillis@redhat.com>"
   - "Bryce Tant <btant@redhat.com>"
