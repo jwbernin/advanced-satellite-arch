@@ -1,4 +1,4 @@
-namespace: redhat
+namespace: infra
 name: advanced_satellite_arch
 description: Ansible roles to manage Red Hat Satellite ASA (Advanced Satellite Architecture) installations
 authors:
