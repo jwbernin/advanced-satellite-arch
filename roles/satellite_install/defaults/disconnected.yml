@@ -576,7 +576,7 @@ satellite_activation_keys:
       - label: "satellite-maintenance-{{ satellite_deployment_version }}-for-rhel-9-x86_64-rpms"
         override: enabled
     service_level: "Premium"
-  # - name: rhel8_epel_x86-dail
+  # - name: rhel8_epel_x86-daily
   #   lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_daily') | map(attribute='env_name') | join(', ') }}"
   #   content_view: rhel8_epel_x86
   #   content_overrides:
