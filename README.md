@@ -1,4 +1,4 @@
-# Ansible Collection - redhat.advance_satellite_arch
+# Ansible Collection - infra.advanced_satellite_arch
 
 Documentation for the collection.
 
@@ -25,21 +25,21 @@ collections:
 Versions matter, in order to build this collection, validate the version in [galaxy.yml](./galaxy.yml) is updated to the correct version before deploying.
 
 ```yaml
-ansible-galaxy collection build redhat.satellite_geo
+ansible-galaxy collection build infra.advanced_satellite_arch
 ```
 
 ## Installing this collection
 
-With the redhat.satellite_geo-X.Y.Z.tar.gz
+With the infra.advanced_satellite_arch-X.Y.Z.tar.gz
 
 ```yaml
-ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
+ansible-galaxy collection install infra.advanced_satellite_arch-X.Y.Z.tar.gz
 ```
 
 ## Roles
 
 ### satellite_install
-[redhat.satellite_geo.satellite_install](roles/satellite_install/)
+[infra.advanced_satellite_arch.satellite_install](roles/satellite_install/)
 
 #### Example Playbook
 
@@ -61,14 +61,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
       ansible.builtin.assert:
         that: satellite_rhn_connected is true
 
-    - name: INCLUDE_ROLE | redhat.satellite_geo.satellite_install
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.satellite_install
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.satellite_install
+        name: infra.advanced_satellite_arch.satellite_install
 ...
 ```
 
 ### capsule_install
-[redhat.satellite_geo.capsule_install](roles/capsule_install/)
+[infra.advanced_satellite_arch.capsule_install](roles/capsule_install/)
 
 #### Example Playbook
 
@@ -86,14 +86,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
     satellite_organization: "home" # Satellite organization
 
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.capsule_install
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.capsule_install
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.capsule_install
+        name: infra.advanced_satellite_arch.capsule_install
 ...
 ```
 
 ### content_view_management
-[redhat.satellite_geo.content_view_management](roles/content_view_management/)
+[infra.advanced_satellite_arch.content_view_management](roles/content_view_management/)
 
 #### Example Playbook
 
@@ -128,14 +128,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
         repositories: []
   
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.content_view_management
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.content_view_management
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.content_view_management
+        name: infra.advanced_satellite_arch.content_view_management
 ...
 ```
 
 ### export_content_library
-[redhat.satellite_geo.export_content_library](roles/export_content_library/)
+[infra.advanced_satellite_arch.export_content_library](roles/export_content_library/)
 
 #### Example Playbook
 
@@ -154,14 +154,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
     satellite_export_destination_server_fqdn: disconnected.satellite.local # Optional
 
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.export_content_library
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.export_content_library
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.export_content_library
+        name: infra.advanced_satellite_arch.export_content_library
 ...
 ```
 
 ### export_content_view
-[redhat.satellite_geo.export_content_view](roles/export_content_view/)
+[infra.advanced_satellite_arch.export_content_view](roles/export_content_view/)
 
 #### Example Playbook
 
@@ -182,14 +182,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
     satellite_export_destination_server_fqdn: disconnected.satellite.local # Optional
 
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.export_content_view
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.export_content_view
       ansible.builtin.include_role:
         name: export_content_view
 ...
 ```
 
 ### import_content_library
-[redhat.satellite_geo.import_content_library](roles/import_content_library/)
+[infra.advanced_satellite_arch.import_content_library](roles/import_content_library/)
 
 #### Example Playbook
 
@@ -206,14 +206,14 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
     satellite_organization: "home" # Satellite organization
 
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.import_content_library
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.import_content_library
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.import_content_library
+        name: infra.advanced_satellite_arch.import_content_library
 ...
 ```
 
 ### import_content_view
-[redhat.satellite_geo.import_content_view](roles/import_content_view/)
+[infra.advanced_satellite_arch.import_content_view](roles/import_content_view/)
 
 #### Example Playbook
 
@@ -230,8 +230,8 @@ ansible-galaxy collection install redhat.satellite_geo-X.Y.Z.tar.gz
     satellite_organization: "home" # Satellite organization
 
   tasks:
-    - name: INCLUDE_ROLE | redhat.satellite_geo.import_content_view
+    - name: INCLUDE_ROLE | infra.advanced_satellite_arch.import_content_view
       ansible.builtin.include_role:
-        name: redhat.satellite_geo.import_content_view
+        name: infra.advanced_satellite_arch.import_content_view
 ...
 ```
