@@ -145,7 +145,7 @@
       register: package_rule_result
 
     # Publish an filtered content view revision, with the content_view_version_number of YYYYMMDD.1
-    - name: Publish | Publish content view {{ cv['name']}} as version {{ content_view_version_number }}.{{ content_view_version_minor_rel_number }}
+    - name: Publish | Publish content view {{ cv['name'] }} as version {{ content_view_version_number }}.{{ content_view_version_minor_rel_number }}
       redhat.satellite.content_view_version:
         username: "{{ satellite_username | mandatory }}"
         password: "{{ satellite_password | mandatory }}"

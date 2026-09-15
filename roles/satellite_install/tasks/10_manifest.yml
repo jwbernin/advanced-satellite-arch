@@ -43,7 +43,6 @@
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_server_url }}"
     organization: "{{ satellite_organization }}"
-    validate_certs: false
     state: refreshed
     validate_certs: "{{ satellite_validate_certs }}"
   when: satellite_rhn_connected is true

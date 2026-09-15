@@ -1,17 +1,17 @@
 ---
 # Satellite
-satellite_rhn_connected: true
-satellite_ak: satellite6-satinfra
-satellite_selinux_state: "enforcing"
-satellite_installer_scenario: "satellite"
-satellite_sync_time: "16:30:00"
-satellite_sync_date: "{{ ansible_date_time['date'] }} {{ satellite_sync_time }} {{ ansible_date_time['tz'] }}"
-satellite_syncplan_interval: "daily"
-satellite_syncplan_name: "{{ satellite_syncplan_interval | capitalize }} {{ satellite_organization }} Products"
-satellite_subscription_to_search: "Red Hat Satellite Infrastructure Subscription"
-satellite_repo_sync_wait_time: 21600 # Seconds
+asa_satellite_rhn_connected: true
+asa_satellite_ak: satellite6-satinfra
+asa_satellite_selinux_state: "enforcing"
+asa_satellite_installer_scenario: "satellite"
+asa_satellite_sync_time: "16:30:00"
+asa_satellite_sync_date: "{{ ansible_date_time['date'] }} {{ satellite_sync_time }} {{ ansible_date_time['tz'] }}"
+asa_satellite_syncplan_interval: "daily"
+asa_satellite_syncplan_name: "{{ satellite_syncplan_interval | capitalize }} {{ satellite_organization }} Products"
+asa_satellite_subscription_to_search: "Red Hat Satellite Infrastructure Subscription"
+asa_satellite_repo_sync_wait_time: 21600 # Seconds
 
-satellite_installer_options:
+asa_satellite_installer_options:
   - '--foreman-initial-admin-username {{ satellite_admin_username }}'
   - '--foreman-initial-admin-password {{ satellite_admin_password }}'
   - '--foreman-initial-organization {{ satellite_organization }}'

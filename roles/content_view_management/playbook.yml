@@ -9,7 +9,7 @@
     satellite_organization: "home"
     content_view_version_number: "{{ ansible_date_time['date'] | split('-') | join('') }}"
     content_view_version_minor_rel_number: "1"
-    content_view_package_filter_end_date: "2025-06-01" 
+    content_view_package_filter_end_date: "2025-06-01"
     content_view_lifecycle_environments: satinfra
     content_view_specific_packages:
       - name: kernel

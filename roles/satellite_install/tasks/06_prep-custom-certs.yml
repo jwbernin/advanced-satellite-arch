@@ -2,6 +2,7 @@
 - name: Certificate | Create Satellite certificate directory
   ansible.builtin.file:
     path: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}"
+    mode: "0644"
     state: directory
 
 - name: Certificate | Generate server private key
@@ -18,6 +19,7 @@
   ansible.builtin.template:
     src: openssl.cnf.j2
     dest: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_openssl.cnf"
+    mode: "0644"
 
 - name: Certificate | Generate CSR file
   ansible.builtin.shell: "openssl req -new -key /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem -out /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_csr.pem -config /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_openssl.cnf"

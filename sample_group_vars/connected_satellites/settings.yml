@@ -32,7 +32,7 @@ satellite_settings:
   - name: "remote_execution_workers_pool_size"
     value: "100"
   - name: "ignored_interface_identifiers"
-    value: [ "lo","en*v*", "usb*", "vnet*", "macvtap*", "_vdsmdummy_", "veth*", "docker*", "tap*", "qbr*", "qvb*", "qvo*", "qr-*", "qg-*", "vlinuxbr*", "vovsbr*" ,"bond*" ]
+    value: ["lo","en*v*","usb*","vnet*","macvtap*","_vdsmdummy_","veth*","docker*","tap*","qbr*","qvb*","qvo*","qr-*","qg-*","vlinuxbr*","vovsbr*","bond*"]
   - name: "host_tasks_workers_pool_size"
     value: "100"
   - name: "login_text"

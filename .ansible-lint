@@ -1,0 +1,10 @@
+skip_list:
+  - yaml[line-length]
+  - yaml[new-line-at-end-of-file]
+  - yaml[commas]
+  - command-instead-of-shell
+  - no-changed-when
+  - package-latest
+  - var-naming[no-role-prefix]
+  - name[template]
+  - run-once[task]

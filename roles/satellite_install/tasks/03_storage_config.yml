@@ -14,6 +14,7 @@
 - name: Find suitable disk device for installation
   when:
     - satellite_data_device_name is not defined
+    - satellite_data_disk is not defined
   block:
     - name: Storage Config | Set variable for suitable disks
       ansible.builtin.set_fact:
@@ -40,7 +41,7 @@
 
     - name: Storage Config | Define Satellite data disk
       ansible.builtin.set_fact:
-        satellite_data_disk: "{{ satellite_data_device }}/{{ data_disk_list[0] }}"
+        satellite_data_disk: "{{ satellite_data_device }}/{{ satellite_install_data_disk_list[0] }}"
       loop: "{{ ansible_facts['devices'] | dict2items }}"
       when:
         - satellite_data_disk is not defined
@@ -48,7 +49,6 @@
         - item['value']['size'] | human_to_bytes >= satellite_data_disk_min_size | string | human_to_bytes(default_unit="G")
         - not item['value']['partitions']
         - not item['value']['holders']
-  when: satellite_data_disk is not defined
 
 - name: Storage Config | Ensure lvm2 package is installed
   ansible.builtin.dnf:

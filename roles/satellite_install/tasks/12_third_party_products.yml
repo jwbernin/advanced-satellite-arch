@@ -28,14 +28,14 @@
 
     - name: Create list of gpg keys
       ansible.builtin.set_fact:
-        gpg_keys: "{{ gpg_keys | default([]) + [{'name': item['name'], 'content': item['content']}] }}"
+        gpg_keys: "{{ satellite_install_gpg_keys | default([]) + [{'name': item['name'], 'content': item['content']}] }}"
       loop: "{{ content_credentials_info['resources'] }}"
 
     - name: Create GPG key files on connected satellite
       ansible.builtin.template:
         src: gpg_keys.j2
         dest: "/var/www/html/pub/{{ item['name'] }}"
-        mode: 0644
+        mode: "0644"
       loop: "{{ gpg_keys }}"
       delegate_to: "{{ satellite_connected_fqdn }}"
 
@@ -43,7 +43,7 @@
       ansible.builtin.get_url:
         url: "https://{{ satellite_connected_fqdn }}/pub/{{ item['name'] }}"
         dest: "/tmp/{{ item['name'] }}"
-        mode: 0644
+        mode: "0644"
       loop: "{{ gpg_keys }}"
 
     - name: Create content credentials on disconnected satellite

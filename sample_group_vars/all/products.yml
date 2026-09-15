@@ -19,7 +19,7 @@ satellite_products:
       #   content_type: yum
       #   gpg_key: RPM-GPG-KEY-EPEL9
       #   url: "{{ upstream_product_path }}/EPEL/EPEL9_S390X"
- 
+
 satellite_rhel_product_name: "Red Hat Enterprise Linux for x86_64"
 satellite_capsule_product_name: "Red Hat Satellite Capsule"
 satellite_rhel_s390_product_name: "Red Hat Enterprise Linux for IBM z Systems"

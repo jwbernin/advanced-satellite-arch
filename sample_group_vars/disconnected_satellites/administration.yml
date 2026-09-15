@@ -4,5 +4,5 @@ upstream_product_path: "http://{{ satellite_connected_fqdn }}/pulp/content/{{ sa
 
 # Manifest
 satellite_disconnected_manifest_path: # manifest filename, full path location /root/manifest/
-satellite_manifest_path: "{{ satellite_disconnected_manifest_path }}" #TODO - Update task file with variable of satellite_manifest_path
+satellite_manifest_path: "{{ satellite_disconnected_manifest_path }}" # TODO - Update task file with variable of satellite_manifest_path
 ...

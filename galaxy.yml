@@ -9,7 +9,7 @@ authors:
 
 version: 0.2.1
 license:
-- GPL-3.0-or-later
+  - GPL-3.0-or-later
 tags:
   - satellite
   - infrastructure
@@ -33,4 +33,4 @@ issues: "https://bugzilla.redhat.com"
 # uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
 # and '.git' are always filtered. Mutually exclusive with 'manifest'
 build_ignore: []
-
+repository: https://github.com/redhat-cop/advanced-satellite-arch

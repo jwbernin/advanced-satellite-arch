@@ -62,7 +62,7 @@
       loop_control:
         loop_var: cv
         label: "{{ cv['name'] }}"
-  
+
     # Publish a new filtered content view, with errata by end_date and specific RPMs to repositories
     - name: Main | Publish filtered content view
       ansible.builtin.include_tasks:

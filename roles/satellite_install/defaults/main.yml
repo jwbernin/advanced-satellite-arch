@@ -1,26 +1,26 @@
 ---
 # Credentials
-satellite_admin_username: admin
-satellite_admin_password: redhat123
-satellite_username: "{{ satellite_admin_username }}"
-satellite_password: "{{ satellite_admin_password }}"
-satellite_installer_verbose: True
+asa_satellite_admin_username: admin
+asa_satellite_admin_password: redhat123
+asa_satellite_username: "{{ satellite_admin_username }}"
+asa_satellite_password: "{{ satellite_admin_password }}"
+asa_satellite_installer_verbose: true
 
 # Administration
-satellite_timezone: UTC
-satellite_data_device: /dev
-satellite_validate_certs: false
+asa_satellite_timezone: UTC
+asa_satellite_data_device: /dev
+asa_satellite_validate_certs: false
 
 # System/OS related
-satellite_min_cpu_count: 4
+asa_satellite_min_cpu_count: 4
 # Size must be integer, MB
-satellite_min_memory_size: 20240
+asa_satellite_min_memory_size: 20240
 # Size must be integer, GB
-satellite_data_disk_min_size: 500
+asa_satellite_data_disk_min_size: 500
 # Size must be integer, GB
-satellite_min_pulp_size: 300
+asa_satellite_min_pulp_size: 300
 # Size must be integer, GB
-satellite_min_pgsql_size: 20
-satellite_server_basearch: "x86_64"
-satellite_os_version: "9"
-satellite_deployment_version: "6.16"
+asa_satellite_min_pgsql_size: 20
+asa_satellite_server_basearch: "x86_64"
+asa_satellite_os_version: "9"
+asa_satellite_deployment_version: "6.16"
