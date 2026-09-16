@@ -1,0 +1,60 @@
+---
+# tasks file for meta_dependency_check
+
+- name: Print dependency check status
+  ansible.builtin.debug:
+    msg: "{{ dependency_check | bool | ternary(__depdency_check_active_msg, __depdency_check_inactive_msg) }}"
+  vars:
+    __depdency_check_active_msg: Dependency check is active. Required collections presence will be verified.
+    __depdency_check_inactive_msg: Dependency check is deactivated. Required collections presence will not be verified. This might cause failure in the next tasks.
+
+- name: Dependency check block
+  when: dependency_check | bool
+  block:
+    - name: Check ansible.posix is installed
+      ansible.builtin.command: ansible-galaxy collection verify ansible.posix --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: ansible_posix
+
+    - name: Check community.crypto is installed
+      ansible.builtin.command: ansible-galaxy collection verify community.crypto --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: community_crypto
+
+    - name: Check community.general is installed
+      ansible.builtin.command: ansible-galaxy collection verify community.general --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: community_general
+
+    - name: Check redhat.rhel_system_roles is installed
+      ansible.builtin.command: ansible-galaxy collection verify redhat.rhel_system_roles --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: redhat_rhel_system_roles
+    
+    - name: Check redhat.satellite is installed
+      ansible.builtin.command: ansible-galaxy collection verify redhat.satellite --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: redhat_satellite
+    
+    - name: Check redhat.satellite_operations is installed
+      ansible.builtin.command: ansible-galaxy collection verify redhat.satellite_operations --ignore-certs
+      failed_when: false
+      changed_when: false
+      register: redhat_satellite_operations
+
+    - name: Ensure one is installed
+      ansible.builtin.fail:
+        msg: One of awx.awx or ansible.controller must be installed
+      when:
+        - "'ERROR!' in ansible_posix.stderr"
+        - "'ERROR!' in community_crypto.stderr"
+        - "'ERROR!' in community_general.stderr"
+        - "'ERROR!' in redhat_rhel_system_roles.stderr"
+        - "'ERROR!' in redhat_satellite.stderr"
+        - "'ERROR!' in redhat_satellite_operations.stderr"
+...

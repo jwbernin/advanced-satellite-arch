@@ -35,7 +35,7 @@
         state: absent
 
     - name: RHSM Subscribe | Remove old RPMs from Satellite 6
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         name:
           - katello-ca-consumer-*.noarch
         state: absent
