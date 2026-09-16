@@ -3,10 +3,5 @@ on: push
 #  pull_request:
 #    branches: ["main", "stable", "release/v*"]
 jobs:
-  build:
-    name: Ansible Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
+  ansible-lint:
+    uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
