@@ -4,7 +4,7 @@ on: push
 #    branches: ["main", "stable", "release/v*"]
 jobs:
   ansible-lint:
-    uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
+    runs-on: ansible/ansible@main
     env:
       ANSIBLE_GALAXY_SERVER_LIST: certified,validated,galaxy
       ANSIBLE_GALAXY_SERVER_CERTIFIED_URL: https://console.redhat.com/api/automation-hub/content/published/
