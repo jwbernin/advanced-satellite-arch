@@ -7,6 +7,7 @@ jobs:
     name: Run ansible-lint
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
       - uses: ansible/ansible-lint@main
         env:
           ANSIBLE_GALAXY_SERVER_LIST: certified,validated,galaxy
