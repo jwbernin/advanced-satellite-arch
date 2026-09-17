@@ -32,11 +32,11 @@ satellite_settings:
   - name: "remote_execution_workers_pool_size"
     value: "100"
   - name: "ignored_interface_identifiers"
-    value: [ "lo","en*v*", "usb*", "vnet*", "macvtap*", "_vdsmdummy_", "veth*", "docker*", "tap*", "qbr*", "qvb*", "qvo*", "qr-*", "qg-*", "vlinuxbr*", "vovsbr*" ,"bond*" ]
+    value: ["lo", "en*v*", "usb*", "vnet*", "_vdsmdummy_", "veth*", "docker*", "tap*", "qbr*", "qvb*", "qvo*", "qr-*", "qg-*", "vlinuxbr*", "vovsbr*", "bond*"]
   - name: "host_tasks_workers_pool_size"
     value: "100"
   - name: "login_text"
-    value: "WARNING: You are entering a Private Network. Only approved Example workers using valid log-in credentials are authorized byond this point, subject to Example Policies and contract terms. By accessing this network, you affirm that your system is equipped with active and current protective measures: Anti-Virus/Malware; OS Security updates and active Firewall. It is against Example policy to store Example Confidential or Regulated data on non-Example systems. Example reserves the right to actively log, monitor and disconnect any session not meeting these reequirements or those that pose unwarranted risk to Example's network or systems. If you are not an authorized user, cancel or exit immediately."
+    value: "Sample login text."
   - name: "unattended_url"
     value: "https://{{ ansible_fqdn }}"
 ...

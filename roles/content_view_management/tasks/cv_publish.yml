@@ -3,7 +3,7 @@
 - name: Publish | Create Content View
   block:
     # Publish an unfiltered content view revision, with the content_view_version_number of YYYYMMDD.0
-    - name: Publish | Publish content view {{ cv['name']}} as version {{ content_view_version_number }}
+    - name: Publish | Publish content view {{ cv['name'] }} as version {{ content_view_version_number }}
       redhat.satellite.content_view_version:
         username: "{{ satellite_username | mandatory }}"
         password: "{{ satellite_password | mandatory }}"

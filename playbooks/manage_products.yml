@@ -22,7 +22,7 @@
   become: true
   vars_files:
     - ../roles/satellite_operations/vars/main.yml
-    
+
   tasks:
     - name: Skip playbook if variables are not defined
       when: satellite_products is not defined or satellite_products | length <= 0

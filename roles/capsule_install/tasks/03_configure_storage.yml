@@ -11,6 +11,7 @@
   when: item['value']['vg'] == capsule_vg_name and lvm_exists
 
 - name: Find suitable disk device for installation
+  when: capsule_data_disk is not defined
   block:
     - name: Storage Config | Set variable for suitable disks
       ansible.builtin.set_fact:
@@ -40,7 +41,6 @@
         - item['value']['size'] | human_to_bytes >= capsule_data_disk_min_size | string | human_to_bytes(default_unit="G")
         - not item['value']['partitions']
         - not item['value']['holders']
-  when: capsule_data_disk is not defined
 
 - name: Storage Config | Ensure lvm2 package is installed
   ansible.builtin.dnf:

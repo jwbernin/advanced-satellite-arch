@@ -110,5 +110,5 @@ satellite_content_views:
         latest: true
     lifecycle_environments:
       - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
-      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"    
+      - "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
 ...

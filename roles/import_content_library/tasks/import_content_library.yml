@@ -7,7 +7,7 @@
 
 # Run shell command to check if Satellite imports are actively running
 - name: Import Content Library | Verify there are no hammer content_import jobs running
-  ansible.builtin.shell: hammer task list --fields id,action,state --search="state = running" | grep -i import | wc -l
+  ansible.builtin.shell: set -o pipefail && hammer task list --fields id,action,state --search="state = running" | grep -i import | wc -l
   register: hammer_job_results
   become: true # must be root to execute this task
   changed_when: false
@@ -42,7 +42,7 @@
     quiet: true
 
 # Import Content Library when satellite_import_content_library is set to true
-- name: Import Content Library 
+- name: Import Content Library
   become: true
   when:
     - satellite_import_content_library

@@ -13,7 +13,7 @@ satellite_activation_keys:
       - label: "satellite-maintenance-{{ satellite_deployment_version }}-for-rhel-9-x86_64-rpms"
         override: enabled
     service_level: "Premium"
-  - name: rhel8_epel_x86-daily 
+  - name: rhel8_epel_x86-daily
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_daily') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel8_epel_x86
     content_overrides:
@@ -26,7 +26,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-8-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel9_epel_x86-daily 
+  - name: rhel9_epel_x86-daily
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_daily') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel9_epel_x86
     content_overrides:
@@ -39,7 +39,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-9-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel8_epel_x86-certify 
+  - name: rhel8_epel_x86-certify
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel8_epel_x86
     content_overrides:
@@ -52,7 +52,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-8-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel9_epel_x86-certify 
+  - name: rhel9_epel_x86-certify
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_certify') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel9_epel_x86
     content_overrides:
@@ -65,7 +65,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-9-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel8_epel_x86-monthly 
+  - name: rhel8_epel_x86-monthly
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel8_epel_x86
     content_overrides:
@@ -78,7 +78,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-8-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel9_epel_x86-monthly 
+  - name: rhel9_epel_x86-monthly
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel9_epel_x86
     content_overrides:
@@ -91,7 +91,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-9-x86_64-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel8_epel_s390-monthly 
+  - name: rhel8_epel_s390-monthly
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel8_epel_s390
     content_overrides:
@@ -106,7 +106,7 @@ satellite_activation_keys:
       - label: satellite-client-6-for-rhel-8-s390x-rpms
         override: enabled
     service_level: "Premium"
-  - name: rhel9_epel_s390-monthly 
+  - name: rhel9_epel_s390-monthly
     lifecycle_environment: "{{ satellite_lifecycle_envs | selectattr('name', 'match', 'satellite_lifecycle_monthly') | map(attribute='env_name') | join(', ') }}"
     content_view: rhel9_epel_s390
     content_overrides:

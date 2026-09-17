@@ -7,7 +7,7 @@ satellite_lifecycle_envs:
   - name: satellite_lifecycle_daily
     env_name: "daily"
     prior: "Library"
-  
+
   - name: satellite_lifecycle_certify
     env_name: "certify"
     prior: "Library"

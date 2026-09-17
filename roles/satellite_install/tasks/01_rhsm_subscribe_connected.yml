@@ -29,7 +29,7 @@
   register: repo_files
 
 - name: RHSM Subscribe | Checking if already registered
-  ansible.builtin.shell: subscription-manager list | grep -i satellite  > /dev/null
+  ansible.builtin.shell: set -o pipefail && subscription-manager list | grep -i satellite  > /dev/null
   register: status
   failed_when: status['rc'] not in [1,0]
   become: true

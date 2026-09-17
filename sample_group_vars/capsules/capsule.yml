@@ -1,6 +1,6 @@
 ---
-satellite_installer_scenario: "capsule"
-satellite_installer_options:
+asa_satellite_installer_scenario: "capsule"
+asa_satellite_installer_options:
   - '--foreman-proxy-register-in-foreman true'
   - '--foreman-proxy-foreman-base-url https://{{ satellite_fqdn }}'
   - '--foreman-proxy-trusted-hosts {{ satellite_fqdn }}'

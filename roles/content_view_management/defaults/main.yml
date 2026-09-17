@@ -1,40 +1,40 @@
 ---
 # Satellite Settings
-satellite_server_url: "satellite.fqdn" # string
-satellite_username: "admin" # Username for Red Hat Satellite Administration
-satellite_password: "changeme" # Best Practice: Store satellite_password in a vault
-satellite_organization: "Default Organization"
+asa_satellite_server_url: "satellite.fqdn" # string
+asa_satellite_username: "admin" # Username for Red Hat Satellite Administration
+asa_satellite_password: "changeme" # Best Practice: Store satellite_password in a vault
+asa_satellite_organization: "Default Organization"
 
 # Optional Variables with defaults
-satellite_validate_certs: false    # boolean
-satellite_operation_timeout: 7200  # 2 hours in seconds, integer
-satellite_poll_interval: 30        # 30 seconds, integer
+asa_satellite_validate_certs: false    # boolean
+asa_satellite_operation_timeout: 7200  # 2 hours in seconds, integer
+asa_satellite_poll_interval: 30        # 30 seconds, integer
 
 # Content View Settings
-content_view_name: satellite6 # string
-content_view_version_number: "{{ ansible_date_time['date'] | split('-') | join('') }}" # Must be string, not integer
-content_view_version_minor_rel_number: "1" # Must be string, not integer
-content_view_lifecycle_environments: [] # Empty list 
-content_view_lifecycle_environments_default: 
+asa_content_view_name: satellite6 # string
+asa_content_view_version_number: "{{ ansible_date_time['date'] | split('-') | join('') }}" # Must be string, not integer
+asa_content_view_version_minor_rel_number: "1" # Must be string, not integer
+asa_content_view_lifecycle_environments: [] # Empty list
+asa_content_view_lifecycle_environments_default:
   - Library
-content_view_repositories: [] # Empty list will include all repositories in filter
-content_view_original_packages: true  # boolean, to include all RPMs with no errata
-content_view_inclusion: true  # boolean, create an include filter; false is exclude filter
-content_view_promote: true # this is the Library content
-content_view_filtered_promote: false
-content_view_date_type: updated # issued or updated
-content_view_filter_type_rpm: rpm # rpm, package_group, erratum, docker, modulemd, deb
-content_view_filter_type_erratum: erratum # rpm, package_group, erratum, docker, modulemd, deb
-content_view_erratum_type: # Erratum types are bugfix, security, enhancement - by default module applies all 3.
+asa_content_view_repositories: [] # Empty list will include all repositories in filter
+asa_content_view_original_packages: true  # boolean, to include all RPMs with no errata
+asa_content_view_inclusion: true  # boolean, create an include filter; false is exclude filter
+asa_content_view_promote: true # this is the Library content
+asa_content_view_filtered_promote: false
+asa_content_view_date_type: updated # issued or updated
+asa_content_view_filter_type_rpm: rpm # rpm, package_group, erratum, docker, modulemd, deb
+asa_content_view_filter_type_erratum: erratum # rpm, package_group, erratum, docker, modulemd, deb
+asa_content_view_erratum_type: # Erratum types are bugfix, security, enhancement - by default module applies all 3.
   - bugfix
   - security
   - enhancement
-content_view_filter_name_by_date: "Filter by date - {{ content_view_package_filter_end_date }}"
-content_view_filter_rule_name_rpm_specific: "RPM Filtered"
-content_view_filter_rule_name_all_repositories: "{{ content_view_filter_rule_name_rpm_specific }} - All Repositories" 
-content_view_filter_description: "Published via AAP {{ ansible_date_time['date'] }} at {{ ansible_date_time['time'] }}" # This should better defined
-content_view_publish_description: "Published via AAP {{ ansible_date_time['date'] }} at {{ ansible_date_time['time'] }}" # This should better defined
-content_view_package_filter_end_date: "{{ ansible_date_time['date'] }}" # YYYY-MM-DD - Specify a date, by default will occur on date of execution
+asa_content_view_filter_name_by_date: "Filter by date - {{ content_view_package_filter_end_date }}"
+asa_content_view_filter_rule_name_rpm_specific: "RPM Filtered"
+asa_content_view_filter_rule_name_all_repositories: "{{ content_view_filter_rule_name_rpm_specific }} - All Repositories"
+asa_content_view_filter_description: "Published via AAP {{ ansible_date_time['date'] }} at {{ ansible_date_time['time'] }}" # This should better defined
+asa_content_view_publish_description: "Published via AAP {{ ansible_date_time['date'] }} at {{ ansible_date_time['time'] }}" # This should better defined
+asa_content_view_package_filter_end_date: "{{ ansible_date_time['date'] }}" # YYYY-MM-DD - Specify a date, by default will occur on date of execution
 
 # content_view_specific_packages is a list, entries must be added in list format. Remove brackets when adding items to list
 # Example
@@ -50,4 +50,4 @@ content_view_package_filter_end_date: "{{ ansible_date_time['date'] }}" # YYYY-M
 #         product: "Red Hat Enterprise Linux for x86_64"
 #   - name: terminator
 #     repositories: []
-content_view_specific_packages: []
+asa_content_view_specific_packages: []

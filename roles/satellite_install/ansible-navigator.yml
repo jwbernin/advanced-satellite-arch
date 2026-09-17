@@ -36,7 +36,7 @@ ansible-navigator:
 
   logging:
     level: critical
-  
+
   mode: stdout
 
   playbook-artifact:

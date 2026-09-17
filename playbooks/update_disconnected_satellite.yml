@@ -44,7 +44,7 @@
     - name: Perform a health check
       ansible.builtin.shell: "satellite-maintain update check --assumeyes --whitelist={{ satellite_whitelist_options }}"
       environment:
-        TMOUT: 0
+        TMOUT: '0'
       retries: 3
       delay: 5
       register: result
@@ -53,7 +53,7 @@
     - name: Update Satellite and RHEL
       ansible.builtin.shell: satellite-maintain update run --assumeyes --whitelist="{{ satellite_whitelist_options }}"
       environment:
-        TMOUT: 0
+        TMOUT: '0'
 
     - name: Stop Satellite services
       ansible.builtin.shell: satellite-maintain service stop

@@ -6,19 +6,19 @@
   delegate_to: "{{ satellite_fqdn }}"
 
 - name: Generate Capsule Certificate | capsule-certs-generate
-  ansible.builtin.command: >- 
-    capsule-certs-generate --foreman-proxy-fqdn {{ inventory_hostname }} 
-    --certs-tar  "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}-capsule-certs.tar"  
-    --server-cert "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert.pem" 
-    --server-key "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem" 
-    --server-ca-cert "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_bundle.pem"   
+  ansible.builtin.command: >
+    capsule-certs-generate --foreman-proxy-fqdn {{ inventory_hostname }}
+    --certs-tar  "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}-capsule-certs.tar"
+    --server-cert "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert.pem"
+    --server-key "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem"
+    --server-ca-cert "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_bundle.pem"
   register: cert_generate_output
   delegate_to: "{{ satellite_fqdn }}"
   throttle: 1
   when:
     - not (existing_tarball.stat.exists)
 
-- name: grab certs from satellite
+- name: Grab certs from satellite
   ansible.builtin.fetch:
     src: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}-capsule-certs.tar"
     dest: /tmp/
@@ -27,23 +27,25 @@
   when:
     - not (existing_tarball.stat.exists)
 
-- name: create certs dir on capsule
+- name: Create certs dir on capsule
   ansible.builtin.file:
     path: "/root/capsule-certificates/{{ inventory_hostname }}"
     state: directory
+    mode: '0755'
   when:
     - not (existing_tarball.stat.exists)
 
-- name: copy certs to capsule
+- name: Copy certs to capsule
   ansible.builtin.copy:
     src: "/tmp/{{ inventory_hostname }}-capsule-certs.tar"
     dest: "/root/capsule-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}-capsule-certs.tar"
+    mode: '0644'
   when:
     - not (existing_tarball.stat.exists)
 
 - name: Set foreman-proxy-oauth-consumer-key fact
   ansible.builtin.set_fact:
-    foreman_proxy_oauth_consumer_key: "{{ line.split('\"')[1] | regex_replace('\", '') }}"
+    foreman_proxy_oauth_consumer_key: "{{ line.split('\"')[1] | regex_replace('\"', '') }}"
   when:
     - not (existing_tarball.stat.exists)
     - line | regex_search('foreman-proxy-oauth-consumer-key')
@@ -55,7 +57,7 @@
 
 - name: Set foreman-proxy-oauth-consumer-secret fact
   ansible.builtin.set_fact:
-    foreman_proxy_oauth_consumer_secret: "{{ line.split('\"')[1] | regex_replace('\", '') }}"
+    foreman_proxy_oauth_consumer_secret: "{{ line.split('\"')[1] | regex_replace('\"', '') }}"
   when:
     - not (existing_tarball.stat.exists)
     - line | regex_search('foreman-proxy-oauth-consumer-secret')

@@ -26,21 +26,21 @@ satellite_server_url: "https://{{ ansible_fqdn }}"
 # satellite_proxy_scheme:
 
 # RHN Org and Activation Key
-satellite_rhn_org: 
+satellite_rhn_org:
 satellite_rhn_activation_key:
 
 # Satellite Organization name
 satellite_organization:
 
 # Satellite Location name
-satellite_initial_location: 
+satellite_initial_location:
 satellite_location: "{{ satellite_initial_location }}"
 
 # Primary POC email for Satellite
 satellite_email:
 
 # Git URL - GitLab, GitHub, etc
-satellite_giturl: 
+satellite_giturl:
 
 # Location of manifest path, on connected Satellite - full path
 satellite_manifest_path:
@@ -117,7 +117,7 @@ satellite_settings:
   - name: "remote_execution_workers_pool_size"
     value: "100"
   - name: "ignored_interface_identifiers"
-    value: [ "lo","en*v*", "usb*", "vnet*", "macvtap*", "_vdsmdummy_", "veth*", "docker*", "tap*", "qbr*", "qvb*", "qvo*", "qr-*", "qg-*", "vlinuxbr*", "vovsbr*" ,"bond*" ]
+    value: ["lo","en*v*", "usb*", "vnet*", "macvtap*", "_vdsmdummy_", "veth*", "docker*", "tap*", "qbr*", "qvb*", "qvo*", "qr-*", "qg-*", "vlinuxbr*", "vovsbr*" ,"bond*"]
   - name: "host_tasks_workers_pool_size"
     value: "100"
   - name: "login_text"

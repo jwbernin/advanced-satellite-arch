@@ -29,10 +29,10 @@
         validate_certs: "{{ satellite_validate_certs | default(omit, true) }}"
         organization: "{{ satellite_organization }}"
         content_view: "{{ cv['name'] | mandatory }}"
-        filter_type: "{{ cv_filter['type']}}"
+        filter_type: "{{ cv_filter['type'] }}"
         name: "{{ cv_filter['name'] }}"
         state: absent
       loop: "{{ cv_filters_result['content_view_filters'] }}"
       loop_control:
-        loop_var:  cv_filter
+        loop_var: cv_filter
         label: "{{ cv_filter['name'] }}"

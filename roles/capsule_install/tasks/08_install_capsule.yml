@@ -5,11 +5,11 @@
   register: service
 
 - name: Run the capsule installer
-  ansible.builtin.command: >-
+  ansible.builtin.command: >
     satellite-installer --scenario {{ satellite_installer_scenario }}
     {{ satellite_installer_options | join(' ') }}
   register: capsule_installer_output
-  when: 
+  when:
     - service.rc != 0
     - satellite_haproxy is false
 
