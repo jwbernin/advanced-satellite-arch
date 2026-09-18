@@ -1,6 +1,6 @@
 name: Run ansible-lint
 on:
-  pull_request_target:
+  pull_request:
     branches: ["main", "stable", "release/v*"]
 jobs:
   authorize:
