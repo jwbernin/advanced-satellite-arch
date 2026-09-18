@@ -28,7 +28,7 @@
 
     - name: Create list of gpg keys
       ansible.builtin.set_fact:
-        gpg_keys: "{{ satellite_install_gpg_keys | default([]) + [{'name': item['name'], 'content': item['content']}] }}"
+        gpg_keys: "{{ gpg_keys | default([]) + [{'name': item['name'], 'content': item['content']}] }}"
       loop: "{{ content_credentials_info['resources'] }}"
 
     - name: Create GPG key files on connected satellite
