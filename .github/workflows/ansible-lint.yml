@@ -1,5 +1,5 @@
 name: Run ansible-lint
-on: 
+on:
   pull_request:
     branches: ["main", "stable", "release/v*"]
 jobs:
