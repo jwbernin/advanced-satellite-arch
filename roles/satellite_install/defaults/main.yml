@@ -5,6 +5,8 @@ asa_satellite_admin_password: redhat123
 asa_satellite_username: "{{ satellite_admin_username }}"
 asa_satellite_password: "{{ satellite_admin_password }}"
 asa_satellite_installer_verbose: true
+asa_satellite_installer_scenario: "{{ satellite_installer_scenario }}"
+asa_satellite_installer_options: "{{ satellite_installer_options }}"
 
 # Administration
 asa_satellite_timezone: UTC
