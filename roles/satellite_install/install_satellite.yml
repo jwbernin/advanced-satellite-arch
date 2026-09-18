@@ -27,7 +27,7 @@
   # Load var files for disconnected Satellite installation
   vars_files:
     - defaults/main.yml
-    - vars/disconnected.yml
+    - defaults/disconnected.yml
 
   tasks:
     - name: Assert that Satellite is RHN disconnected

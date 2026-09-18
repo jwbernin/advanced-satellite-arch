@@ -15,9 +15,45 @@ As specified in the [Red Hat Satellite Documentation](https://docs.redhat.com/en
 - Valid Red Hat Satellite Subscription
 - Red Hat Satellite Infrastructure Subscription manifest
 
+## Role Structure
+
+`tasks/main.yml` includes the following task files in order. Each file is prefixed with a number so the install sequence is readable from the file listing alone:
+
+|Order|File|Purpose|
+|:---:|:---|:---|
+|00|[00_preliminary_check.yml](tasks/00_preliminary_check.yml)|Asserts that required variables (`satellite_deployment_version`, RHN org/activation key when connected, `satellite_location`) are set and that the host meets the minimum memory and CPU requirements|
+|01|[01_rhsm_subscribe_connected.yml](tasks/01_rhsm_subscribe_connected.yml) / [01_rhsm_subscribe_disconnected.yml](tasks/01_rhsm_subscribe_disconnected.yml)|Sets the timezone, resets `/etc/yum.repos.d` and `rhsm.conf`, and registers the host to the Red Hat CDN (connected) or to the upstream connected Satellite via a generated registration command (disconnected). Only one of these runs, gated by `satellite_rhn_connected`|
+|02|[02_patch.yml](tasks/02_patch.yml)|Clears the DNF cache, checks for and applies package updates, enforces the configured SELinux state, and reboots if a new kernel was installed|
+|03|[03_storage_config.yml](tasks/03_storage_config.yml)|Detects or reuses a suitable data disk, then creates the `satellite_vg_name` volume group, logical volumes, XFS filesystems, and mounts for `satellite_req_dirs` (typically `/var/lib/pulp` and `/var/lib/pgsql`)|
+|04|[04_install_packages.yml](tasks/04_install_packages.yml)|Installs `satellite_packages` (the `satellite` package and supporting tools) if not already present|
+|05|[05_configure_firewall.yml](tasks/05_configure_firewall.yml)|Enables and starts `firewalld` and opens the `RH-Satellite-6` service|
+|06|[06_prep-custom-certs.yml](tasks/06_prep-custom-certs.yml)|Generates a private key, OpenSSL config, and CSR under `/tmp/backup/satellite-certificates/<host>/` for a custom (non-self-signed) Satellite certificate. Signing and installing the signed cert is currently a manual, commented-out step|
+|07|[07_dns_config.yml](tasks/07_dns_config.yml)|Ensures `/etc/hosts` has an entry mapping the host's IP to its FQDN and short name|
+|08|[08_install_satellite.yml](tasks/08_install_satellite.yml)|Runs `redhat.satellite_operations.installer`, applies a tuning profile via `satellite-installer --tuning`, and verifies `satellite-maintain service status` succeeds|
+|09|[09_settings.yml](tasks/09_settings.yml)|Applies `satellite_settings`, disables subscription connection for disconnected Satellites, configures an HTTP proxy when defined, and (disconnected only) imports the upstream Satellite's CA cert and configures the CDN to sync from it|
+|10|[10_manifest.yml](tasks/10_manifest.yml)|Uploads the subscription manifest (`satellite_manifest_path` or `satellite_disconnected_manifest_path`) if no subscriptions are present yet, and refreshes the manifest for connected Satellites|
+|11|[11_enablerepos.yml](tasks/11_enablerepos.yml)|Fixes ownership of `/var/lib/pulp` and enables `satellite_redhat_repos`|
+|12|[12_third_party_products.yml](tasks/12_third_party_products.yml)|Creates content credentials and 3rd-party products/repos. Connected Satellites create them directly; disconnected Satellites pull GPG keys from the upstream connected Satellite first|
+|13|[13_repo_sync.yml](tasks/13_repo_sync.yml)|Syncs every product that has at least one repository and creates/updates the Red Hat products sync plan (`satellite_syncplan_interval`, `satellite_sync_time`)|
+|14|[14_lifecycle_envs.yml](tasks/14_lifecycle_envs.yml)|Creates `satellite_lifecycle_envs`|
+|15|[15_content_views.yml](tasks/15_content_views.yml)|Creates `satellite_content_views`, then publishes and promotes an initial "1.0" version to their lifecycle environments|
+|16|[16_activation_keys.yml](tasks/16_activation_keys.yml)|Creates `satellite_activation_keys`|
+|17|[17_locations.yml](tasks/17_locations.yml)|Creates `satellite_locations`|
+|18|[18_satellite_location.yml](tasks/18_satellite_location.yml)|Registers the Satellite's own smart proxy with `satellite_location`|
+
+## Templates
+
+|Template|Used by|Purpose|
+|:---|:---|:---|
+|[openssl.cnf.j2](templates/openssl.cnf.j2)|`06_prep-custom-certs.yml`|OpenSSL config used to generate the CSR for a custom Satellite certificate|
+|[gpg_keys.j2](templates/gpg_keys.j2)|`12_third_party_products.yml`|Renders a GPG key file served from the connected Satellite's `/var/www/html/pub/` so disconnected Satellites can download it|
+|[tuning_profile.j2](templates/tuning_profile.j2)|`08_install_satellite.yml`|Rendered via a `lookup('ansible.builtin.template', ...)` to select the `satellite-installer --tuning` profile that matches `satellite_size`|
+|[custom-hiera.yaml.j2](templates/custom-hiera.yaml.j2)|not currently referenced by any task|Reference Puppet hiera overrides (Apache/Passenger, PostgreSQL, TLS) for manual tuning; intended to be copied to `/etc/foreman-installer/custom-hiera.yaml`|
+|[00-http.conf.j2](templates/00-http.conf.j2), [default.conf.j2](templates/default.conf.j2), [httpd.service.j2](templates/httpd.service.j2), [net-keytab.conf.j2](templates/net-keytab.conf.j2)|not currently referenced by any task|Reserved for future Kerberos/AD-integrated httpd (GSSAPI, keytab) work; `net-keytab.conf.j2` depends on `satellite_ldap_workgroup`/`satellite_ldap_realm`, which are not defined anywhere in this role today|
+
 ## Common Variables
 
-Contains all variables in the [defaults](defaults/main/main.yml) variable file, as well as a few variables that are in both the [connected](defaults/main/connected.yml) and the [disconnected](defaults/main/disconnected.yml) variable files. Since they are common, they are likely set to the same value for both connected and disconnected (with the exception of satellite_rhn_connected)
+Contains all variables in the [defaults](defaults/main.yml) variable file, as well as a few variables that are in both the [connected](defaults/connected.yml) and the [disconnected](defaults/disconnected.yml) variable files. Since they are common, they are likely set to the same value for both connected and disconnected (with the exception of satellite_rhn_connected)
 
 |Variable Name|Default Value|Type|Description|Required|
 |:---|:---:|:---:|:---|:---|
@@ -241,7 +277,7 @@ satellite_activation_keys:
   - puppet
   - redis
   - tomcat
-- Collections located in [collections/requirements.yml](collections/requirements.yml) must be installed
+- Collections located in [collections/requirements.yml](collections/requirements.yml) must be installed: `ansible.posix`, `community.general`, `community.crypto`, `redhat.rhel_system_roles`, `redhat.satellite`, `redhat.satellite_operations`. The `redhat.satellite` collection also supplies the `content_credentials`, `repositories`, `content_views`, `locations`, and `activation_keys` roles that this role includes directly
 
 ## Example Playbooks
 
@@ -255,6 +291,16 @@ satellite_activation_keys:
         name: satellite_automation_install
 ...
 ```
+
+## Known Issues
+
+These were found and fixed while documenting the role:
+
+- [defaults/main.yml](defaults/main.yml) defines an `asa_satellite_*`-prefixed set of variables (credentials, timezone, sizing thresholds, etc.) that duplicate the unprefixed `satellite_*` variables in [defaults/connected.yml](defaults/connected.yml) / [defaults/disconnected.yml](defaults/disconnected.yml). Most of `defaults/main.yml` is dead; only `asa_satellite_installer_verbose`, `asa_satellite_installer_scenario`, and `asa_satellite_installer_options` are consumed, by `08_install_satellite.yml`. The latter two were previously undefined and now alias the real `satellite_installer_scenario` / `satellite_installer_options` variables.
+- `03_storage_config.yml` referenced `satellite_install_data_disk_list` instead of the `data_disk_list` fact actually built by the preceding loop; the disk-autodetection fallback path was broken and now uses `data_disk_list`.
+- `09_settings.yml` referenced `satellite_install_content_cred_output` instead of the registered `content_cred_output`; `cdn_credential_id` now resolves correctly on a disconnected install.
+- `12_third_party_products.yml` referenced `satellite_install_gpg_keys` inside the loop that builds the `gpg_keys` fact, so the accumulator never saw its own prior iterations; it now references `gpg_keys`.
+- `install_satellite.yml` loaded `vars/disconnected.yml` for the disconnected play; that file doesn't exist in the role. It now loads `defaults/disconnected.yml`, matching where the disconnected variables actually live.
 
 ## TODO AAP vs CLI execution differences
 
