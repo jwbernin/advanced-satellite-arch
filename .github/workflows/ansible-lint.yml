@@ -1,11 +1,21 @@
 name: Run ansible-lint
 on:
-  pull_request:
+  pull_request_target:
     branches: ["main", "stable", "release/v*"]
 jobs:
+  authorize:
+    environment:
+      ${{ github.event.pull_request.head.repo.full_name != github.repository &&
+      'external' || 'internal' || 'testing' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: true
+
   build:
+    environment: testing
     name: Run ansible-lint
     runs-on: ubuntu-latest
+    needs: authorize
     steps:
       - uses: actions/checkout@v6
       - uses: ansible/ansible-lint@main
